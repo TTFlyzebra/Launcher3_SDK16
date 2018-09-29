@@ -15,7 +15,8 @@
 -->
 
 <resources>
-    <dimen name="app_icon_size">64dp</dimen>
+    <!-- @FlyZebra 修改图标大小 -->
+    <dimen name="app_icon_size">102px</dimen>
 
 <!-- Dynamic Grid -->
     <dimen name="dynamic_grid_edge_margin">6dp</dimen>

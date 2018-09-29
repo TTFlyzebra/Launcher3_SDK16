@@ -2642,6 +2642,12 @@ public class Workspace extends PagedView
 
                 // If the item being dropped is a shortcut and the nearest drop
                 // cell also contains a shortcut, then create a folder with the two shortcuts.
+//                if (!mInScrollArea && createUserFolderIfNecessary(cell, container,
+//                        dropTargetLayout, mTargetCell, distance, false, d.dragView, null)) {
+//                    return;
+//                }
+
+                //@FlyZebra 不建立文件夹(同一个位置有几个应用图标)
                 if (!mInScrollArea && createUserFolderIfNecessary(cell, container,
                         dropTargetLayout, mTargetCell, distance, false, d.dragView, null)) {
                     return;
@@ -3273,8 +3279,11 @@ public class Workspace extends PagedView
         if (mDragMode == DRAG_MODE_NONE && userFolderPending &&
                 !mFolderCreationAlarm.alarmPending()) {
 
+//            FolderCreationAlarmListener listener = new
+//                    FolderCreationAlarmListener(targetLayout, targetCell[0], targetCell[1]);
+            //@FlyZebra 屏蔽移动到图标上建立文件夹的动画
             FolderCreationAlarmListener listener = new
-                    FolderCreationAlarmListener(targetLayout, targetCell[0], targetCell[1]);
+                    FolderCreationAlarmListener(targetLayout, 18, 18);
 
             if (!accessibleDrag) {
                 mFolderCreationAlarm.setOnAlarmListener(listener);
@@ -4286,7 +4295,7 @@ public class Workspace extends PagedView
 
     interface ItemOperator {
         /**
-         * Process the next itemInfo, possibly with side-effect on {@link ItemOperator#value}.
+         * Process the next itemInfo, possibly with side-effect on {@link ItemOperator#}.
          *
          * @param info info for the shortcut
          * @param view view for the shortcut

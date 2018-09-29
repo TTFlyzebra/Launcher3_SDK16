@@ -516,12 +516,15 @@ public class Launcher extends Activity
             }
         }
 
-        if (shouldShowIntroScreen()) {
-            showIntroScreen();
-        } else {
-            showFirstRunActivity();
-            showFirstRunClings();
-        }
+        /**
+         * @FlyZebra 取消首次显示其它页面
+         */
+//        if (shouldShowIntroScreen()) {
+//            showIntroScreen();
+//        } else {
+//            showFirstRunActivity();
+//            showFirstRunClings();
+//        }
     }
 
     @Override
@@ -2431,33 +2434,41 @@ public class Launcher extends Activity
 
     @Override
     public void onBackPressed() {
-        if (mLauncherCallbacks != null && mLauncherCallbacks.handleBackPressed()) {
-            return;
-        }
-
-        if (mDragController.isDragging()) {
-            mDragController.cancelDrag();
-            return;
-        }
-
+//        if (mLauncherCallbacks != null && mLauncherCallbacks.handleBackPressed()) {
+//            return;
+//        }
+//
+//        if (mDragController.isDragging()) {
+//            mDragController.cancelDrag();
+//            return;
+//        }
+//
+//        if (isAppsViewVisible()) {
+//            showWorkspace(true);
+//        } else if (isWidgetsViewVisible())  {
+//            showOverviewMode(true);
+//        } else if (mWorkspace.isInOverviewMode()) {
+//            showWorkspace(true);
+//        } else if (mWorkspace.getOpenFolder() != null) {
+//            Folder openFolder = mWorkspace.getOpenFolder();
+//            if (openFolder.isEditingName()) {
+//                openFolder.dismissEditingName();
+//            } else {
+//                closeFolder();
+//            }
+//        } else {
+//            mWorkspace.exitWidgetResizeMode();
+//
+//            // Back button is a no-op here, but give at least some feedback for the button press
+//            mWorkspace.showOutlinesTemporarily();
+//        }
+        /**
+         *启用后退按钮可退出应用
+         */
         if (isAppsViewVisible()) {
             showWorkspace(true);
-        } else if (isWidgetsViewVisible())  {
-            showOverviewMode(true);
-        } else if (mWorkspace.isInOverviewMode()) {
-            showWorkspace(true);
-        } else if (mWorkspace.getOpenFolder() != null) {
-            Folder openFolder = mWorkspace.getOpenFolder();
-            if (openFolder.isEditingName()) {
-                openFolder.dismissEditingName();
-            } else {
-                closeFolder();
-            }
         } else {
-            mWorkspace.exitWidgetResizeMode();
-
-            // Back button is a no-op here, but give at least some feedback for the button press
-            mWorkspace.showOutlinesTemporarily();
+            super.onBackPressed();
         }
     }
 
@@ -3337,13 +3348,24 @@ public class Launcher extends Activity
         }
     }
 
+//    void showOverviewMode(boolean animated) {
+//        mWorkspace.setVisibility(View.VISIBLE);
+//        mStateTransitionAnimation.startAnimationToWorkspace(mState, mWorkspace.getState(),
+//                Workspace.State.OVERVIEW,
+//                WorkspaceStateTransitionAnimation.SCROLL_TO_CURRENT_PAGE, animated,
+//                null /* onCompleteRunnable */);
+//        mState = State.WORKSPACE;
+//    }
+
+    //@FlyZebra 长按空白处显示所有应用图标界面
     void showOverviewMode(boolean animated) {
-        mWorkspace.setVisibility(View.VISIBLE);
-        mStateTransitionAnimation.startAnimationToWorkspace(mState, mWorkspace.getState(),
-                Workspace.State.OVERVIEW,
-                WorkspaceStateTransitionAnimation.SCROLL_TO_CURRENT_PAGE, animated,
-                null /* onCompleteRunnable */);
-        mState = State.WORKSPACE;
+        onLongClickAllAppsButton(null);
+//        mWorkspace.setVisibility(View.VISIBLE);
+//        mStateTransitionAnimation.startAnimationToWorkspace(mState, mWorkspace.getState(),
+//                Workspace.State.OVERVIEW,
+//                WorkspaceStateTransitionAnimation.SCROLL_TO_CURRENT_PAGE, animated,
+//                null /* onCompleteRunnable */);
+//        mState = State.WORKSPACE;
     }
 
     /**

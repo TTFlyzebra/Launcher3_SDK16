@@ -24,13 +24,14 @@
     android:orientation="vertical">
 
     <!-- Both android:focusable and android:focusableInTouchMode are needed for
-         the view to get focus change events. -->
+         the view to get focus change events. 
+	 @高度设为0陷藏搜索栏，不获取输入焦点-->
     <FrameLayout
         android:id="@+id/search_box_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:layout_height="0dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:visibility="gone" />
 
     <FrameLayout

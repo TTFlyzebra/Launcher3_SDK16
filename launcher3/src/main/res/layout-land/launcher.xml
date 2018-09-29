@@ -34,12 +34,15 @@
             android:layout_height="52dp" />
 
         <!-- The workspace contains 5 screens of cells -->
-        <!-- DO NOT CHANGE THE ID -->
+        <!-- DO NOT CHANGE THE ID 
+	        launcher:pageIndicator="@+id/page_indicator"
+	        横屏添加底部导航点显示-->
         <com.android.launcher3.Workspace
             android:id="@+id/workspace"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            launcher:pageIndicator="@+id/page_indicator"
             launcher:defaultScreen="@integer/config_workspaceDefaultScreen" />
 
         <!-- DO NOT CHANGE THE ID -->
@@ -56,6 +59,14 @@
         <include layout="@layout/overview_panel"
             android:id="@+id/overview_panel"
             android:visibility="gone" />
+        <!-- Keep these behind the workspace so that they are not visible when
+            we go into AllApps 
+	        横屏添加底部导航点显示 -->
+        <include android:id="@+id/page_indicator"
+            layout="@layout/page_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
         <include layout="@layout/widgets_view"
             android:id="@+id/widgets_view"

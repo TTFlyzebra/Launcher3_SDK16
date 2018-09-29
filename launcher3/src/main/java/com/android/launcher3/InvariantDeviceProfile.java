@@ -173,31 +173,33 @@ public class InvariantDeviceProfile {
         ArrayList<InvariantDeviceProfile> predefinedDeviceProfiles = new ArrayList<>();
         // width, height, #rows, #columns, #folder rows, #folder columns,
         // iconSize, iconTextSize, #hotseat, #hotseatIconSize, defaultLayoutId.
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Super Short Stubby",
-                255, 300,     2, 3, 2, 3, 3, 48, 13, 3, 48, R.xml.default_workspace_4x4));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Shorter Stubby",
-                255, 400,     3, 3, 3, 3, 3, 48, 13, 3, 48, R.xml.default_workspace_4x4));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Short Stubby",
-                275, 420,     3, 4, 3, 4, 4, 48, 13, 5, 48, R.xml.default_workspace_4x4));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Stubby",
-                255, 450,     3, 4, 3, 4, 4, 48, 13, 5, 48, R.xml.default_workspace_4x4));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus S",
-                296, 491.33f, 4, 4, 4, 4, 4, 48, 13, 5, 48, R.xml.default_workspace_4x4));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 4",
-                335, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 5, 56, R.xml.default_workspace_4x4));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 5",
-                359, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 5, 56, R.xml.default_workspace_4x4));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Large Phone",
-                406, 694,     5, 5, 4, 4, 4, 64, 14.4f,  5, 56, R.xml.default_workspace_5x5));
-        // The tablet profile is odd in that the landscape orientation
-        // also includes the nav bar on the side
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 7",
-                575, 904,     5, 6, 4, 5, 4, 72, 14.4f,  7, 60, R.xml.default_workspace_5x6));
-        // Larger tablet profiles always have system bars on the top & bottom
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 10",
-                727, 1207,    5, 6, 4, 5, 4, 76, 14.4f,  7, 64, R.xml.default_workspace_5x6));
-        predefinedDeviceProfiles.add(new InvariantDeviceProfile("20-inch Tablet",
-                1527, 2527,   7, 7, 6, 6, 4, 100, 20,  7, 72, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Super Short Stubby",
+//                255, 300,     2, 3, 2, 3, 3, 48, 13, 3, 48, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Shorter Stubby",
+//                255, 400,     3, 3, 3, 3, 3, 48, 13, 3, 48, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Short Stubby",
+//                275, 420,     3, 4, 3, 4, 4, 48, 13, 5, 48, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Stubby",
+//                255, 450,     3, 4, 3, 4, 4, 48, 13, 5, 48, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus S",
+//                296, 491.33f, 4, 4, 4, 4, 4, 48, 13, 5, 48, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 4",
+//                335, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 5, 56, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 5",
+//                359, 567,     4, 4, 4, 4, 4, DEFAULT_ICON_SIZE_DP, 13, 5, 56, R.xml.default_workspace_4x4));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Large Phone",
+//                406, 694,     5, 5, 4, 4, 4, 64, 14.4f,  5, 56, R.xml.default_workspace_5x5));
+//        // The tablet profile is odd in that the landscape orientation
+//        // also includes the nav bar on the side
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 7",
+//                575, 904,     5, 6, 4, 5, 4, 72, 14.4f,  7, 60, R.xml.default_workspace_5x6));
+//        // Larger tablet profiles always have system bars on the top & bottom
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 10",
+//                727, 1207,    5, 6, 4, 5, 4, 76, 14.4f,  7, 64, R.xml.default_workspace_5x6));
+//        predefinedDeviceProfiles.add(new InvariantDeviceProfile("20-inch Tablet",
+//                1527, 2527,   7, 7, 6, 6, 4, 100, 20,  7, 72, R.xml.default_workspace_4x4));
+        predefinedDeviceProfiles.add(new InvariantDeviceProfile("JarCar",
+                800, 1280,     2, 6, 0, 0, 4, 102, 20,  1, 102, R.xml.jancar_default_workspace));
         return predefinedDeviceProfiles;
     }
 

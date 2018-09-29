@@ -380,7 +380,7 @@ public class IconCache {
         }
         if (entry == null) {
             entry = new CacheEntry();
-            entry.icon = Utilities.createIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+            entry.icon = Utilities.create3rdIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
         }
         entry.title = app.getLabel();
         entry.contentDescription = mUserManager.getBadgedLabelForUser(entry.title, app.getUser());
@@ -542,7 +542,7 @@ public class IconCache {
             // Check the DB first.
             if (!getEntryFromDB(cacheKey, entry, useLowResIcon)) {
                 if (info != null) {
-                    entry.icon = Utilities.createIconBitmap(info.getBadgedIcon(mIconDpi), mContext);
+                    entry.icon = Utilities.create3rdIconBitmap(info.getBadgedIcon(mIconDpi), mContext);
                 } else {
                     if (usePackageIcon) {
                         CacheEntry packageEntry = getEntryForPackageLocked(
@@ -625,7 +625,7 @@ public class IconCache {
                     }
                     Drawable drawable = mUserManager.getBadgedDrawableForUser(
                             appInfo.loadIcon(mPackageManager), user);
-                    entry.icon = Utilities.createIconBitmap(drawable, mContext);
+                    entry.icon = Utilities.create3rdIconBitmap(drawable, mContext);
                     entry.title = appInfo.loadLabel(mPackageManager);
                     entry.contentDescription = mUserManager.getBadgedLabelForUser(entry.title, user);
                     entry.isLowResIcon = false;

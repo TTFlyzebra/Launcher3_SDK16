@@ -35,8 +35,11 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
@@ -710,4 +713,107 @@ public final class Utilities {
     public static String createDbSelectionQuery(String columnName, Iterable<?> values) {
         return String.format(Locale.ENGLISH, "%s IN (%s)", columnName, TextUtils.join(", ", values));
     }
+
+
+    private static int sIconWidth = 102;
+    private static int sIconHeight = 102;
+    private static int sIconTextureWidth = 102;
+    private static int sIconTextureHeight = 102;
+
+    private static final Paint sBlurPaint = new Paint();
+    private static final Paint sGlowColorPressedPaint = new Paint();
+    private static final Paint sGlowColorFocusedPaint = new Paint();
+    private static final Paint sDisabledPaint = new Paint();
+    private final static int INTERNAL_PADDING = 0;
+
+    private static void initStatics(Context context) {
+        final Resources resources = context.getResources();
+        final DisplayMetrics metrics = resources.getDisplayMetrics();
+        final float density = metrics.density;
+
+        sIconWidth = sIconHeight = (int) resources.getDimension(R.dimen.app_icon_size);
+        sIconTextureWidth = sIconTextureHeight = sIconWidth;
+
+        sBlurPaint.setMaskFilter(new BlurMaskFilter(5 * density, BlurMaskFilter.Blur.NORMAL));
+        sGlowColorPressedPaint.setColor(0xffffc300);
+        sGlowColorFocusedPaint.setColor(0xffff8e00);
+
+        ColorMatrix cm = new ColorMatrix();
+        cm.setSaturation(0.2f);
+        sDisabledPaint.setColorFilter(new ColorMatrixColorFilter(cm));
+        sDisabledPaint.setAlpha(0x88);
+    }
+
+    public static Bitmap create3rdIconBitmap(Drawable icon, Context context) {
+        synchronized (sCanvas) { // we share the statics :-(
+            if (sIconWidth == -1) {
+                initStatics(context);
+            }
+            int width = sIconWidth;
+            int height = sIconHeight;
+            if (icon instanceof PaintDrawable) {
+                PaintDrawable painter = (PaintDrawable) icon;
+                painter.setIntrinsicWidth(width);
+                painter.setIntrinsicHeight(height);
+            } else if (icon instanceof BitmapDrawable) {
+                // Ensure the bitmap has a density.
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) icon;
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                if (bitmap.getDensity() == Bitmap.DENSITY_NONE) {
+                    bitmapDrawable.setTargetDensity(context.getResources().getDisplayMetrics());
+                }
+            }
+            int sourceWidth = icon.getIntrinsicWidth();
+            int sourceHeight = icon.getIntrinsicHeight();
+            if (sourceWidth > 0 && sourceHeight > 0) {
+                // There are intrinsic sizes.
+                if (width < sourceWidth || height < sourceHeight) {
+                    // It's too big, scale it down.
+                    final float ratio = (float) sourceWidth / sourceHeight;
+                    if (sourceWidth > sourceHeight) {
+                        height = (int) (width / ratio);
+                    } else if (sourceHeight > sourceWidth) {
+                        width = (int) (height * ratio);
+                    }
+                } else if (sourceWidth < width && sourceHeight < height) {
+                    // Don't scale up the icon
+                    width = sourceWidth;
+                    height = sourceHeight;
+                }
+            }
+            // no intrinsic size --> use default size
+            int textureWidth = sIconTextureWidth;
+            int textureHeight = sIconTextureHeight;
+            final Bitmap bitmap = Bitmap.createBitmap(textureWidth, textureHeight, Bitmap.Config.ARGB_8888);
+            final Canvas canvas = sCanvas;
+            canvas.setBitmap(bitmap);
+            final int left = (textureWidth - width) / 2;
+            final int top = (textureHeight - height) / 2;
+            @SuppressWarnings("all") // suppress dead code warning
+            final boolean debug = false;
+            if (debug) {
+                // draw a big box for the icon for debugging
+                canvas.drawColor(sColors[sColorIndex]);
+                if (++sColorIndex >= sColors.length) sColorIndex = 0;
+                Paint debugPaint = new Paint();
+                debugPaint.setColor(0xffcccc00);
+                canvas.drawRect(left, top, left+width, top+height, debugPaint);
+            }
+            //Drawable drawable = context.getResources().getDrawable(R.drawable.homescreen_blue_strong_holo);
+            try {
+                Drawable drawable = context.getResources().getDrawable(R.drawable.icon_bg3);
+                drawable.setBounds(0, 0, sIconWidth, sIconHeight);
+                drawable.draw(canvas);
+            } catch (Exception e) {
+                //Log.d(TAG, "PackageManager.getApplicationInfo failed for " + packageName);
+            }
+            sOldBounds.set(icon.getBounds());
+            icon.setBounds(left, top, left+width, top+height);
+            icon.draw(canvas);
+            icon.setBounds(sOldBounds);
+            canvas.setBitmap(null);
+            return bitmap;
+        }
+    }
+
 }

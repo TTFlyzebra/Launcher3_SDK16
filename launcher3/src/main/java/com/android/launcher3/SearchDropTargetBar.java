@@ -108,6 +108,8 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         mDropTargetBar = findViewById(R.id.drag_target_bar);
         mInfoDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.info_target_text);
         mDeleteDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.delete_target_text);
+        //@FlyZebra 隐藏卸载应用选项
+        mDeleteDropTarget.setVisibility(GONE);
         mUninstallDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.uninstall_target_text);
 
         mInfoDropTarget.setSearchDropTargetBar(this);
