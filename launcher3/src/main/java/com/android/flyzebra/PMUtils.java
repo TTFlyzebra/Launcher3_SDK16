@@ -1,12 +1,6 @@
 package com.android.flyzebra;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.LauncherActivityInfo;
-import android.content.pm.LauncherApps;
-import android.os.Build;
-import android.os.UserHandle;
-import android.os.UserManager;
 
 import com.android.flyzebra.data.Const;
 import com.android.launcher3.AppInfo;

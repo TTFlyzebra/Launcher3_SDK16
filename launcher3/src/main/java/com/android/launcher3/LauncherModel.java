@@ -1562,7 +1562,6 @@ public class LauncherModel extends BroadcastReceiver
                 if (DEBUG_LOADERS) Log.d(TAG, "step 2: loading all apps");
                 loadAndBindAllApps();
 				
-				allLauncherActivitys = PMUtils.getAppInfos(null, mContext, mIconCache);
                 checkItems(mContext);
             }
 
@@ -3752,7 +3751,8 @@ public class LauncherModel extends BroadcastReceiver
     /**
      * 每次启动检测workspace显示的图标，对比本机安装应用进行增减
      */
-    private synchronized void checkItems(Context mContext) {
+    public synchronized void checkItems(Context mContext) {
+        allLauncherActivitys = PMUtils.getAppInfos(null, mContext, mIconCache);
         if (allLauncherActivitys != null && !allLauncherActivitys.isEmpty()) {
             SharedPreferences sp = mContext.getSharedPreferences(LauncherAppState.getSharedPreferencesKey(), Context.MODE_PRIVATE);
             if (sp.getBoolean(FIRST_CREATE_DB, true)) {
