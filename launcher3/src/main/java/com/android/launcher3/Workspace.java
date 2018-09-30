@@ -2642,16 +2642,12 @@ public class Workspace extends PagedView
 
                 // If the item being dropped is a shortcut and the nearest drop
                 // cell also contains a shortcut, then create a folder with the two shortcuts.
+
+                //@FlyZebra 不建立文件夹(同一个位置有几个应用图标)
 //                if (!mInScrollArea && createUserFolderIfNecessary(cell, container,
 //                        dropTargetLayout, mTargetCell, distance, false, d.dragView, null)) {
 //                    return;
 //                }
-
-                //@FlyZebra 不建立文件夹(同一个位置有几个应用图标)
-                if (!mInScrollArea && createUserFolderIfNecessary(cell, container,
-                        dropTargetLayout, mTargetCell, distance, false, d.dragView, null)) {
-                    return;
-                }
 
                 if (addToExistingFolderIfNecessary(cell, dropTargetLayout, mTargetCell,
                         distance, d, false)) {
