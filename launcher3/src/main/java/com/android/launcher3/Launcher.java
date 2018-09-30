@@ -1389,7 +1389,10 @@ public class Launcher extends Activity
         // Setup the hotseat
         mHotseat = (Hotseat) findViewById(R.id.hotseat);
         if (mHotseat != null) {
-            mHotseat.setOnLongClickListener(this);
+			/**
+			 *@FlyZebra 禁用HotSeat事件
+			**/
+//            mHotseat.setOnLongClickListener(this);
         }
 
         mOverviewPanel = (ViewGroup) findViewById(R.id.overview_panel);

@@ -17,8 +17,6 @@
 package com.android.launcher3;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -118,16 +116,23 @@ public class Hotseat extends FrameLayout
         Drawable d = context.getResources().getDrawable(R.drawable.all_apps_button_icon);
 
         mLauncher.resizeIconDrawable(d);
-        allAppsButton.setCompoundDrawables(null, d, null, null);
+			/**
+			 *@FlyZebra 不显示allAppsButton
+			**/
+//       allAppsButton.setCompoundDrawables(null, d, null, null);
+		allAppsButton.setVisibility(GONE);
 
         allAppsButton.setContentDescription(context.getString(R.string.all_apps_button_label));
         allAppsButton.setOnKeyListener(new HotseatIconKeyEventListener());
         if (mLauncher != null) {
             mLauncher.setAllAppsButton(allAppsButton);
-            allAppsButton.setOnTouchListener(mLauncher.getHapticFeedbackTouchListener());
-            allAppsButton.setOnClickListener(mLauncher);
-            allAppsButton.setOnLongClickListener(mLauncher);
-            allAppsButton.setOnFocusChangeListener(mLauncher.mFocusHandler);
+			/**
+			 *@FlyZebra 禁用allAppsButton触摸点击事件
+			**/
+//            allAppsButton.setOnTouchListener(mLauncher.getHapticFeedbackTouchListener());
+//            allAppsButton.setOnClickListener(mLauncher);
+//            allAppsButton.setOnLongClickListener(mLauncher);
+//            allAppsButton.setOnFocusChangeListener(mLauncher.mFocusHandler);
         }
 
         // Note: We do this to ensure that the hotseat is always laid out in the orientation of
