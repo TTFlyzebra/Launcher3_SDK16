@@ -44,8 +44,8 @@ public class PageIndicator extends LinearLayout {
         int inactiveId;
 
         public PageMarkerResources() {
-            activeId = R.drawable.ic_pageindicator_current;
-            inactiveId = R.drawable.ic_pageindicator_default;
+            activeId = R.drawable.nav_on;
+            inactiveId = R.drawable.nav_off;
         }
         public PageMarkerResources(int aId, int iaId) {
             activeId = aId;

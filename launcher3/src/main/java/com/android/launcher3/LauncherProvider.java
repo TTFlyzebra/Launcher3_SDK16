@@ -49,6 +49,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.android.flyzebra.FlyLog;
 import com.android.launcher3.AutoInstallsLayout.LayoutParserCallback;
 import com.android.launcher3.LauncherSettings.Favorites;
 import com.android.launcher3.compat.UserHandleCompat;
@@ -63,6 +64,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LauncherProvider extends ContentProvider {
     private static final String TAG = "LauncherProvider";
@@ -134,7 +137,42 @@ public class LauncherProvider extends ContentProvider {
             throw new RuntimeException("Error: attempting to add item without specifying an id");
         }
         helper.checkId(table, values);
-        return db.insert(table, nullColumnHack, values);
+        /**
+         * 检查是否已经添加了该图标
+         */
+        boolean hasInsert = false;
+        String str = (String) values.get("intent");
+        try {
+            if (!TextUtils.isEmpty(str)) {
+                String v = "component=.*;";
+                Pattern p = Pattern.compile(v);
+                Matcher m = p.matcher(str);
+                if (m.find()) {
+                    String component = m.group();
+                    Cursor c = db.query(table, null,
+                            "intent LIKE ?",
+                            new String[]{"%"+component+"%"},
+                            null,
+                            null,
+                            null,
+                            null);
+                    hasInsert = c != null && c.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
+
+        long ret = 0;
+        if (!hasInsert) {
+            ret = db.insert(table, nullColumnHack, values);
+        } else {
+            FlyLog.e("is already insert intent=%s", str);
+        }
+        if (values.get("screen") != null) {
+            FlyLog.d("dbInsertAndCheck--: intent=" + str);
+        }
+        return ret;
     }
 
     private void reloadLauncherIfExternal() {

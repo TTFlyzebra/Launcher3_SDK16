@@ -310,8 +310,12 @@ public class DeviceProfile {
                         availableWidth / 2, paddingBottom + availableHeight / 2);
             } else {
                 // Pad the top and bottom of the workspace with search/hotseat bar sizes
+                /**
+                 * @FlyZebra 设置WorkSpack的位置,占有SearchBar的高度
+                 */
                 padding.set(desiredWorkspaceLeftRightMarginPx - defaultWidgetPadding.left,
-                        searchBarBounds.bottom,
+//                        searchBarBounds.bottom,
+                        0,
                         desiredWorkspaceLeftRightMarginPx - defaultWidgetPadding.right,
                         hotseatBarHeightPx + pageIndicatorHeightPx);
             }

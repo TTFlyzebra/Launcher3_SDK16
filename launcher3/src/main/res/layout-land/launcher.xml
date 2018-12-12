@@ -40,7 +40,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            launcher:defaultScreen="@integer/config_workspaceDefaultScreen" />
+            launcher:defaultScreen="@integer/config_workspaceDefaultScreen"
+            launcher:pageIndicator="@+id/page_indicator"/>
+
+        <!-- Keep these behind the workspace so that they are not visible when
+         we go into AllApps -->
+        <include
+            android:id="@+id/page_indicator"
+            layout="@layout/page_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
         <!-- DO NOT CHANGE THE ID -->
         <include layout="@layout/hotseat"

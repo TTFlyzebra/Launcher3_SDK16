@@ -131,7 +131,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Launcher extends Activity
         implements View.OnClickListener, OnLongClickListener, LauncherModel.Callbacks,
-                   View.OnTouchListener, PageSwitchListener, LauncherProviderChangeListener {
+                   View.OnTouchListener, PageSwitchListener, LauncherProviderChangeListener,
+                    LauncherLoadingDB.ILoadingDB{
     static final String TAG = "Launcher";
     static final boolean LOGD = false;
 
@@ -475,17 +476,17 @@ public class Launcher extends Activity
             android.os.Debug.stopMethodTracing();
         }
 
-        if (!mRestoring) {
-            if (DISABLE_SYNCHRONOUS_BINDING_CURRENT_PAGE) {
-                // If the user leaves launcher, then we should just load items asynchronously when
-                // they return.
-                mModel.startLoader(PagedView.INVALID_RESTORE_PAGE);
-            } else {
-                // We only load the page synchronously if the user rotates (or triggers a
-                // configuration change) while launcher is in the foreground
-                mModel.startLoader(mWorkspace.getRestorePage());
-            }
-        }
+//        if (!mRestoring) {
+//            if (DISABLE_SYNCHRONOUS_BINDING_CURRENT_PAGE) {
+//                // If the user leaves launcher, then we should just load items asynchronously when
+//                // they return.
+//                mModel.startLoader(PagedView.INVALID_RESTORE_PAGE);
+//            } else {
+//                // We only load the page synchronously if the user rotates (or triggers a
+//                // configuration change) while launcher is in the foreground
+//                mModel.startLoader(mWorkspace.getRestorePage());
+//            }
+//        }
 
         // For handling default keys
         mDefaultKeySsb = new SpannableStringBuilder();
@@ -516,11 +517,26 @@ public class Launcher extends Activity
             }
         }
 
-        if (shouldShowIntroScreen()) {
-            showIntroScreen();
-        } else {
-            showFirstRunActivity();
-            showFirstRunClings();
+//        if (shouldShowIntroScreen()) {
+//            showIntroScreen();
+//        } else {
+//            showFirstRunActivity();
+//            showFirstRunClings();
+//        }
+    }
+
+    @Override
+    public void loadingFinish() {
+        if (!mRestoring) {
+            if (DISABLE_SYNCHRONOUS_BINDING_CURRENT_PAGE) {
+                // If the user leaves launcher, then we should just load items asynchronously when
+                // they return.
+                mModel.startLoader(PagedView.INVALID_RESTORE_PAGE);
+            } else {
+                // We only load the page synchronously if the user rotates (or triggers a
+                // configuration change) while launcher is in the foreground
+                mModel.startLoader(mWorkspace.getRestorePage());
+            }
         }
     }
 
@@ -974,6 +990,13 @@ public class Launcher extends Activity
     @Override
     protected void onStart() {
         super.onStart();
+        /**
+         * 检测并加载所有应用图标
+         */
+        LauncherLoadingDB launcherLoadingDB = new LauncherLoadingDB(LauncherAppState.getInstance());
+        launcherLoadingDB.setOnListener(this);
+        launcherLoadingDB.start(this);
+
         FirstFrameAnimatorHelper.setIsVisible(true);
 
         if (mLauncherCallbacks != null) {
