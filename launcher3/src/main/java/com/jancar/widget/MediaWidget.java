@@ -20,13 +20,21 @@ public class MediaWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         FlyLog.e("onEnabled");
-        context.startService(new Intent(context, MediaWidgetService.class));
+        try {
+            context.startService(new Intent(context, MediaWidgetService.class));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDisabled(Context context) {
         FlyLog.e("onDisabled");
-        context.stopService(new Intent(context, MediaWidgetService.class));
+        try{
+            context.stopService(new Intent(context, MediaWidgetService.class));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -81,6 +81,7 @@
                     android:gravity="left">
 
                     <ImageView
+                        android:id="@+id/wg_music_prev"
                         android:layout_width="42px"
                         android:layout_height="38px"
                         android:src="@drawable/media_prev_01" />
@@ -93,6 +94,7 @@
                     android:gravity="center">
 
                     <ImageView
+                        android:id="@+id/wg_music_play"
                         android:layout_width="42px"
                         android:layout_height="38px"
                         android:src="@drawable/media_play_01" />
@@ -105,6 +107,7 @@
                     android:gravity="right">
 
                     <ImageView
+                        android:id="@+id/wg_music_next"
                         android:layout_width="42px"
                         android:layout_height="38px"
                         android:src="@drawable/media_next_01" />
@@ -183,6 +186,7 @@
                     android:gravity="start">
 
                     <ImageView
+                        android:id="@+id/wg_fm_prev"
                         android:layout_width="42px"
                         android:layout_height="38px"
                         android:src="@drawable/media_prev_01" />
@@ -195,6 +199,7 @@
                     android:gravity="end">
 
                     <ImageView
+                        android:id="@+id/wg_fm_next"
                         android:layout_width="42px"
                         android:layout_height="38px"
                         android:src="@drawable/media_next_01" />

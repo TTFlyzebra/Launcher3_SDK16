@@ -1,5 +1,6 @@
 package com.android.launcher3;
 
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -53,9 +54,9 @@ public class LauncherLoadingDB {
                 try {
                     String str1 = p1.componentName.toString();
                     String str2 = p2.componentName.toString();
-                    if (str1.contains("com.google")||str1.contains("com.android.vending")) {
+                    if (str1.contains("com.google") || str1.contains("com.android.vending")) {
                         return 1;
-                    } else if (str2.contains("com.google")||str2.contains("com.android.vending")) {
+                    } else if (str2.contains("com.google") || str2.contains("com.android.vending")) {
                         return -1;
                     } else {
                         return 0;
@@ -107,7 +108,7 @@ public class LauncherLoadingDB {
                 AppInfo info = new AppInfo();
                 info.id = c.getInt(idIndex);
                 String intentDescription = c.getString(intentIndex);
-                if(TextUtils.isEmpty(intentDescription)){
+                if (TextUtils.isEmpty(intentDescription)) {
                     continue;
                 }
                 try {
@@ -137,11 +138,15 @@ public class LauncherLoadingDB {
             AppInfo workInfo = favoritesApps.get(i);
             boolean isFind = false;
             for (AppInfo appInfo : allLauncherActivitys) {
-                String it1 = workInfo.intent.toUri(0);
-                String it2 = appInfo.intent.toUri(0);
-                if (it1.equals(it2)) {
-                    isFind = true;
-                    break;
+                try {
+                    ComponentName it1 = workInfo.intent.getComponent();
+                    ComponentName it2 = appInfo.intent.getComponent();
+                    if (it1.compareTo(it2) == 0) {
+                        isFind = true;
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             if (!isFind) {
@@ -200,13 +205,18 @@ public class LauncherLoadingDB {
             boolean isFind = false;
             int sum1 = favoritesApps.size();
             for (int i = sum1 - 1; i >= 0; i--) {
-                String it1 = favoritesApps.get(i).intent.toUri(0);
-                String it2 = appInfo.intent.toUri(0);
-                if (it1.equals(it2)) {
-                    isFind = true;
-                    break;
+                try {
+                    ComponentName it1 = favoritesApps.get(i).intent.getComponent();
+                    ComponentName it2 = appInfo.intent.getComponent();
+                    if (it1.compareTo(it2) == 0) {
+                        isFind = true;
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+
             if (isFind) {
                 try {
                     FlyLog.d("already add packname=%s!", appInfo.componentName.getClassName());

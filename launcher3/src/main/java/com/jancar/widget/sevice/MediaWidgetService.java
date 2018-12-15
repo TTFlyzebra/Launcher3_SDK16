@@ -1,15 +1,18 @@
 package com.jancar.widget.sevice;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -18,6 +21,7 @@ import com.jancar.media.JacMediaController;
 import com.jancar.widget.MediaWidget;
 import com.jancar.widget.utils.FlyLog;
 
+import java.util.Locale;
 import java.util.Set;
 
 public class MediaWidgetService extends Service {
@@ -30,7 +34,10 @@ public class MediaWidgetService extends Service {
     private long mDuration;
     private Bitmap mBitmap;
 
-    @Nullable
+    private static final String ACTION_NEXT = "intent.action.widget.ACTION_NEXT";
+    private static final String ACTION_PREV = "intent.action.widget.ACTION_PREV";
+    private static final String ACTION_PLAYPAUSE = "intent.action.widget.ACTION_PLAYPAUSE";
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -41,10 +48,16 @@ public class MediaWidgetService extends Service {
     public void onCreate() {
         super.onCreate();
         FlyLog.d("onCreate");
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_NEXT);
+        intentFilter.addAction(ACTION_PREV);
+        intentFilter.addAction(ACTION_PLAYPAUSE);
+        registerReceiver(mReceiver, intentFilter);
         controller = new JacMediaController(getApplicationContext()) {
             @Override
             public void onSession(String page) {
-                FlyLog.d("JacMediaController onSession=%s", page);
+                FlyLog.d("onSession page=%s", page);
                 RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.media_widget);
                 switch (page) {
                     case "music":
@@ -64,22 +77,23 @@ public class MediaWidgetService extends Service {
 
             @Override
             public void onPlayUri(String uri) {
-                FlyLog.d("JacMediaController onPlayUri=%s", uri);
+                FlyLog.d("onPlayUri=%s", uri);
             }
 
             @Override
             public void onPlayId(int currentId, int total) {
-                FlyLog.d("JacMediaController onPlayId currentId=%d,total=%d", currentId, total);
+                FlyLog.d("onPlayId currentId=%d,total=%d", currentId, total);
             }
 
             @Override
             public void onPlayState(int state) {
-                FlyLog.d("JacMediaController onPlayState=%s", state);
+                FlyLog.d("onPlayState=%s", state);
             }
 
             @Override
             public void onProgress(long current, long duration) {
-                FlyLog.d("current=%d,duration=%d", current, duration);
+                FlyLog.d("onProgress current=%d,duration=%d", current, duration);
+                mSession = SHOW_MUSIC;
                 mCurrent = current;
                 mDuration = duration;
                 upWidgetView();
@@ -87,17 +101,18 @@ public class MediaWidgetService extends Service {
 
             @Override
             public void onRepeat(int repeat) {
-                FlyLog.d("JacMediaController repeat=%d", repeat);
+                FlyLog.d("onRepeat repeat=%d", repeat);
             }
 
             @Override
             public void onFavor(boolean bFavor) {
-                FlyLog.d("JacMediaController bFavor=" + bFavor);
+                FlyLog.d("onFavor bFavor=" + bFavor);
             }
 
             @Override
             public void onID3(String title, String artist, String album, byte[] artWork) {
                 FlyLog.d("onID3 title=%s,artist=%s,album=%s", title, artist, album);
+                mSession  = SHOW_MUSIC;
                 mTitle = title;
                 if (artWork == null) {
                     mBitmap = null;
@@ -109,6 +124,8 @@ public class MediaWidgetService extends Service {
 
             @Override
             public void onMediaEvent(String action, Bundle extras) {
+                FlyLog.d("onMediaEvent action=%s,extras=" + extras, action);
+                mSession = SHOW_FM;
                 try {
                     Set<String> keys = extras.keySet();
                     StringBuilder builder = new StringBuilder();
@@ -119,9 +136,34 @@ public class MediaWidgetService extends Service {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                upWidgetView();
             }
         };
         controller.Connect();
+    }
+
+    private void playNext() {
+        try {
+            controller.requestNext();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void playPrev() {
+        try {
+            controller.requestPrev();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void playPasue() {
+        try {
+            controller.requestPPause();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -135,6 +177,7 @@ public class MediaWidgetService extends Service {
     public void onDestroy() {
         super.onDestroy();
         controller.DisConnect();
+        unregisterReceiver(mReceiver);
     }
 
     private void upWidgetView() {
@@ -145,6 +188,11 @@ public class MediaWidgetService extends Service {
             case SHOW_FM:
                 remoteViews.setViewVisibility(R.id.wg_music, View.GONE);
                 remoteViews.setViewVisibility(R.id.wg_radio, View.VISIBLE);
+                remoteViews.setOnClickPendingIntent(R.id.wg_fm_next,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_NEXT), 0));
+                remoteViews.setOnClickPendingIntent(R.id.wg_fm_prev,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_PREV), 0));
+                FlyLog.d("upWidgetView fm");
                 break;
             case SHOW_MUSIC:
                 remoteViews.setViewVisibility(R.id.wg_music, View.VISIBLE);
@@ -166,6 +214,13 @@ public class MediaWidgetService extends Service {
                 }
 
                 //设置点击事件
+                remoteViews.setOnClickPendingIntent(R.id.wg_music_next,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_NEXT), 0));
+                remoteViews.setOnClickPendingIntent(R.id.wg_music_play,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_PLAYPAUSE), 0));
+                remoteViews.setOnClickPendingIntent(R.id.wg_music_prev,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_PREV), 0));
+                FlyLog.d("upWidgetView music");
                 break;
         }
 
@@ -182,6 +237,29 @@ public class MediaWidgetService extends Service {
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
-        return hours > 0 ? String.format("%02d:%02d:%02d", hours, minutes, seconds) : String.format("%02d:%02d", minutes, seconds);
+        return hours > 0 ? String.format(Locale.ENGLISH, "%02d:%02d:%02d", hours, minutes, seconds)
+                : String.format(Locale.ENGLISH, "%02d:%02d", minutes, seconds);
     }
+
+
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            FlyLog.d("onReceive intent=" + intent);
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case ACTION_NEXT:
+                        playNext();
+                        break;
+                    case ACTION_PREV:
+                        playPrev();
+                        break;
+                    case ACTION_PLAYPAUSE:
+                        playPasue();
+                        break;
+                }
+            }
+        }
+    };
 }
