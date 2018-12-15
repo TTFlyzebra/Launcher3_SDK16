@@ -48,6 +48,8 @@ import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.Pair;
 
+import com.android.flyzebra.FlyLog;
+import com.android.flyzebra.LaunActivityUtil;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherActivityInfoCompat;
 import com.android.launcher3.compat.LauncherAppsCompat;
@@ -3016,6 +3018,13 @@ public class LauncherModel extends BroadcastReceiver
                         if (DEBUG_LOADERS) Log.d(TAG, "mAllAppsList.addPackage " + packages[i]);
                         mIconCache.updateIconsForPkg(packages[i], mUser);
                         mBgAllAppsList.addPackage(context, packages[i], mUser);
+
+                        //@FlyZebra添加图标到桌面
+                        ArrayList<AppInfo> list = (ArrayList<AppInfo>) LaunActivityUtil.getAppInfos(packages[i], context, mIconCache);
+                        if (list != null && !list.isEmpty()) {
+                            FlyLog.i("OP_ADD, addAndBindAddedWorkspaceItems=%s", packages[i]);
+                            addAndBindAddedWorkspaceItems(context, list);
+                        }
                     }
 
                     ManagedProfileHeuristic heuristic = ManagedProfileHeuristic.get(context, mUser);
@@ -3030,6 +3039,13 @@ public class LauncherModel extends BroadcastReceiver
                         mIconCache.updateIconsForPkg(packages[i], mUser);
                         mBgAllAppsList.updatePackage(context, packages[i], mUser);
                         mApp.getWidgetCache().removePackage(packages[i], mUser);
+
+                        //@FlyZebra添加图标到桌面
+                        ArrayList<AppInfo> list = (ArrayList<AppInfo>) LaunActivityUtil.getAppInfos(packages[i], context, mIconCache);
+                        if (list != null && !list.isEmpty()) {
+                            FlyLog.i("OP_UPDATE, addAndBindAddedWorkspaceItems=%s", packages[i]);
+                            addAndBindAddedWorkspaceItems(context, list);
+                        }
                     }
                     break;
                 case OP_REMOVE: {

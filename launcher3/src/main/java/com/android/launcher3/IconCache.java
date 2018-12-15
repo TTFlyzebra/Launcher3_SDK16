@@ -251,7 +251,7 @@ public class IconCache {
         /**
          *后台删除应用不会删除wackspace图标，添加下面代码同步删除
          */
-        LauncherModel.deletePackageFromDatabase(mContext,packageName,user);
+        LauncherModel.deletePackageFromDatabase(mContext, packageName, user);
     }
 
     public void updateDbIcons(Set<String> ignorePackagesForMainUser) {
@@ -398,7 +398,30 @@ public class IconCache {
         }
         if (entry == null) {
             entry = new CacheEntry();
-            entry.icon = Utilities.create3rdIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+            /**
+             * 更换高德和手机互连图标
+             */
+            boolean isGaode = false;
+            try {
+                isGaode = app.getComponentName().getPackageName().contains("com.autonavi.amapauto");
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+
+            boolean isElink = false;
+            try {
+                isElink = app.getComponentName().getPackageName().contains("net.easyconn");
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+
+            if (isGaode) {
+                entry.icon = Utilities.create3rdIconBitmap(mContext.getResources().getDrawable(R.drawable.jancar_nav), mContext);
+            } else if (isElink) {
+                entry.icon = Utilities.create3rdIconBitmap(mContext.getResources().getDrawable(R.drawable.jancar_elink), mContext);
+            } else {
+                entry.icon = Utilities.create3rdIconBitmap(app.getBadgedIcon(mIconDpi), mContext);
+            }
         }
         entry.title = app.getLabel();
         entry.contentDescription = mUserManager.getBadgedLabelForUser(entry.title, app.getUser());
@@ -561,7 +584,30 @@ public class IconCache {
             // Check the DB first.
             if (!getEntryFromDB(cacheKey, entry, useLowResIcon)) {
                 if (info != null) {
-                    entry.icon = Utilities.create3rdIconBitmap(info.getBadgedIcon(mIconDpi), mContext);
+                    /**
+                     * 更换高德和手机互连图标
+                     */
+                    boolean isGaode = false;
+                    try {
+                        isGaode = info.getComponentName().getPackageName().contains("com.autonavi.amapauto");
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+
+                    boolean isElink = false;
+                    try {
+                        isElink = info.getComponentName().getPackageName().contains("net.easyconn");
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+
+                    if (isGaode) {
+                        entry.icon = Utilities.create3rdIconBitmap(mContext.getResources().getDrawable(R.drawable.jancar_nav), mContext);
+                    } else if (isElink) {
+                        entry.icon = Utilities.create3rdIconBitmap(mContext.getResources().getDrawable(R.drawable.jancar_elink), mContext);
+                    } else {
+                        entry.icon = Utilities.create3rdIconBitmap(info.getBadgedIcon(mIconDpi), mContext);
+                    }
                 } else {
                     if (usePackageIcon) {
                         CacheEntry packageEntry = getEntryForPackageLocked(
@@ -642,8 +688,34 @@ public class IconCache {
                     if (appInfo == null) {
                         throw new NameNotFoundException("ApplicationInfo is null");
                     }
-                    Drawable drawable = mUserManager.getBadgedDrawableForUser(
-                            appInfo.loadIcon(mPackageManager), user);
+                    Drawable drawable = null;
+                    FlyLog.d("3 " + appInfo.className);
+
+                    /**
+                     * 更换高德和手机互连图标
+                     */
+                    boolean isGaode = false;
+                    try {
+                        isGaode = appInfo.className.contains("com.autonavi.amapauto");
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+
+                    boolean isElink = false;
+                    try {
+                        isElink = appInfo.className.contains("net.easyconn");
+                    } catch (Exception e) {
+                        FlyLog.e(e.toString());
+                    }
+
+
+                    if (isGaode) {
+                        drawable = mContext.getResources().getDrawable(R.drawable.jancar_nav);
+                    }else if(isElink){
+                        drawable = mContext.getResources().getDrawable(R.drawable.jancar_elink);
+                    } else {
+                        drawable = mUserManager.getBadgedDrawableForUser(appInfo.loadIcon(mPackageManager), user);
+                    }
                     entry.icon = Utilities.create3rdIconBitmap(drawable, mContext);
                     entry.title = appInfo.loadLabel(mPackageManager);
                     entry.contentDescription = mUserManager.getBadgedLabelForUser(entry.title, user);

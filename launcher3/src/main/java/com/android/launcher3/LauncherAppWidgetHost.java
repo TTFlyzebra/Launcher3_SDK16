@@ -24,6 +24,8 @@ import android.os.TransactionTooLargeException;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.android.flyzebra.FlyLog;
+
 import java.util.ArrayList;
 
 
@@ -66,6 +68,7 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
 
     @Override
     public void startListening() {
+        FlyLog.e("startListening start");
         try {
             super.startListening();
         } catch (Exception e) {
@@ -78,10 +81,12 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
                 throw new RuntimeException(e);
             }
         }
+        FlyLog.e("startListening end");
     }
 
     @Override
     public void stopListening() {
+        FlyLog.e("stopListening");
         super.stopListening();
         clearViews();
     }
@@ -126,4 +131,5 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
                 mLauncher, appWidget);
         super.onProviderChanged(appWidgetId, info);
     }
+
 }

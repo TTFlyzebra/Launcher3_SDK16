@@ -98,9 +98,9 @@ public class LauncherLoadingDB {
                 final int screenIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.SCREEN);
                 final int cellXIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.CELLX);
                 final int cellYIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.CELLY);
-//                final int spanXIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.SPANX);
-//                final int spanYIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.SPANY);
-//                final int rankIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.RANK);
+                final int spanXIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.SPANX);
+                final int spanYIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.SPANY);
+                final int rankIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.RANK);
 //                final int restoredIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.RESTORED);
 //                final int profileIdIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.PROFILE_ID);
 //                final int optionsIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.OPTIONS);
@@ -119,9 +119,10 @@ public class LauncherLoadingDB {
                 info.screenId = c.getInt(screenIndex);
                 info.cellX = c.getInt(cellXIndex);
                 info.cellY = c.getInt(cellYIndex);
-                info.spanX = 1;
-                info.spanY = 1;
                 info.title = c.getString(titleIndex);
+                info.spanX = c.getInt(spanXIndex);
+                info.spanY = c.getInt(spanYIndex);
+                info.rank = c.getInt(rankIndex);
                 favoritesApps.add(info);
             }
         } finally {
