@@ -240,5 +240,7 @@
         </receiver>
         <service android:name="com.jancar.widget.sevice.MediaWidgetService"
             android:exported="true"/>
+        <service android:name="com.jancar.widget.sevice.DateWidgetService"
+            android:exported="true"/>
     </application>
 </manifest>

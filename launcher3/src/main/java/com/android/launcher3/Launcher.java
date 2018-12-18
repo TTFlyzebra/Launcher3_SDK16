@@ -111,6 +111,7 @@ import com.android.launcher3.util.Thunk;
 import com.android.launcher3.widget.PendingAddWidgetInfo;
 import com.android.launcher3.widget.WidgetHostViewLoader;
 import com.android.launcher3.widget.WidgetsContainerView;
+import com.jancar.widget.sevice.DateWidgetService;
 import com.jancar.widget.sevice.MediaWidgetService;
 
 import java.io.File;
@@ -989,6 +990,7 @@ public class Launcher extends Activity
 
         try{
             stopService(new Intent(this, MediaWidgetService.class));
+            stopService(new Intent(this, DateWidgetService.class));
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -1012,6 +1014,7 @@ public class Launcher extends Activity
 
         try {
             startService(new Intent(this, MediaWidgetService.class));
+            startService(new Intent(this, DateWidgetService.class));
         }catch (Exception e){
             e.printStackTrace();
         }

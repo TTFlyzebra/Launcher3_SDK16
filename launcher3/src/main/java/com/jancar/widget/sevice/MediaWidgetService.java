@@ -22,7 +22,6 @@ import com.jancar.widget.MediaWidget;
 import com.jancar.widget.utils.FlyLog;
 
 import java.util.Locale;
-import java.util.Set;
 
 public class MediaWidgetService extends Service {
     private JacMediaController controller;
@@ -33,6 +32,11 @@ public class MediaWidgetService extends Service {
     private long mCurrent;
     private long mDuration;
     private Bitmap mBitmap;
+    private int playstate = 0;
+
+    private String fmText = "FM1";
+    private String fmName = "87.5";
+    private String fmKz = "MHz";
 
     private static final String ACTION_NEXT = "intent.action.widget.ACTION_NEXT";
     private static final String ACTION_PREV = "intent.action.widget.ACTION_PREV";
@@ -58,7 +62,7 @@ public class MediaWidgetService extends Service {
             @Override
             public void onSession(String page) {
                 FlyLog.d("onSession page=%s", page);
-                RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.media_widget);
+                RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.wg_media_widget);
                 switch (page) {
                     case "music":
                     case "a2dp":
@@ -88,11 +92,15 @@ public class MediaWidgetService extends Service {
             @Override
             public void onPlayState(int state) {
                 FlyLog.d("onPlayState=%s", state);
+                if(playstate!=state){
+                    playstate = state;
+                    upWidgetView();
+                }
             }
 
             @Override
             public void onProgress(long current, long duration) {
-                FlyLog.d("onProgress current=%d,duration=%d", current, duration);
+//                FlyLog.d("onProgress current=%d,duration=%d", current, duration);
                 mSession = SHOW_MUSIC;
                 mCurrent = current;
                 mDuration = duration;
@@ -112,7 +120,7 @@ public class MediaWidgetService extends Service {
             @Override
             public void onID3(String title, String artist, String album, byte[] artWork) {
                 FlyLog.d("onID3 title=%s,artist=%s,album=%s", title, artist, album);
-                mSession  = SHOW_MUSIC;
+                mSession = SHOW_MUSIC;
                 mTitle = title;
                 if (artWork == null) {
                     mBitmap = null;
@@ -127,12 +135,10 @@ public class MediaWidgetService extends Service {
                 FlyLog.d("onMediaEvent action=%s,extras=" + extras, action);
                 mSession = SHOW_FM;
                 try {
-                    Set<String> keys = extras.keySet();
-                    StringBuilder builder = new StringBuilder();
-                    for (String key : keys) {
-                        builder.append(key).append(":").append(extras.get(key));
-                    }
-//                    tvCustom.setText(builder.toString());
+                    int fmType = extras.getInt("Band");
+                    fmText = fmType == 0 ? "FM1" : fmType == 1 ? "FM2" : fmType == 2 ? "FM3" : fmType == 3 ? "AM1" : "AM2";
+                    fmKz = fmType < 3 ? "MHz" : "KHz";
+                    fmName = extras.getString("name");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -181,13 +187,16 @@ public class MediaWidgetService extends Service {
     }
 
     private void upWidgetView() {
-        FlyLog.e("upWidgetView");
-        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.media_widget);
+//        FlyLog.d("upWidgetView");
+        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.wg_media_widget);
         //更新是MUSIC -FM
         switch (mSession) {
             case SHOW_FM:
                 remoteViews.setViewVisibility(R.id.wg_music, View.GONE);
                 remoteViews.setViewVisibility(R.id.wg_radio, View.VISIBLE);
+                remoteViews.setTextViewText(R.id.wg_fm_tv01, fmText);
+                remoteViews.setTextViewText(R.id.wg_fm_tv02, fmName);
+                remoteViews.setTextViewText(R.id.wg_fm_tv03, fmKz);
                 remoteViews.setOnClickPendingIntent(R.id.wg_fm_next,
                         PendingIntent.getBroadcast(this, 0, new Intent(ACTION_NEXT), 0));
                 remoteViews.setOnClickPendingIntent(R.id.wg_fm_prev,
@@ -205,6 +214,7 @@ public class MediaWidgetService extends Service {
                 remoteViews.setProgressBar(R.id.media_music_progressbar, (int) (mDuration / 1000), (int) (mCurrent / 1000), false);
                 remoteViews.setTextViewText(R.id.media_music_starttime, str1);
                 remoteViews.setTextViewText(R.id.media_music_endtime, str2);
+                remoteViews.setImageViewResource(R.id.wg_music_play, playstate == 1 ? R.drawable.media_pause : R.drawable.media_play);
 
                 //更新图片
                 if (mBitmap == null) {
@@ -227,7 +237,7 @@ public class MediaWidgetService extends Service {
 
         ComponentName componentName = new ComponentName(getApplicationContext(), MediaWidget.class);
         AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(componentName, remoteViews);
-        FlyLog.e("upWidgetView--end remouteView=" + remoteViews);
+//        FlyLog.d("upWidgetView--end remouteView=" + remoteViews);
     }
 
 

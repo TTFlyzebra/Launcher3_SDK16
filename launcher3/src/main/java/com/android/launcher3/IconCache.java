@@ -41,7 +41,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.flyzebra.FlyLog;
+import com.jancar.flyzebra.FlyLog;
 import com.android.launcher3.compat.LauncherActivityInfoCompat;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.UserHandleCompat;
@@ -694,28 +694,28 @@ public class IconCache {
                     /**
                      * 更换高德和手机互连图标
                      */
-                    boolean isGaode = false;
-                    try {
-                        isGaode = appInfo.className.contains("com.autonavi.amapauto");
-                    } catch (Exception e) {
-                        FlyLog.e(e.toString());
-                    }
+//                    boolean isGaode = false;
+//                    try {
+//                        isGaode = appInfo.className.contains("com.autonavi.amapauto");
+//                    } catch (Exception e) {
+//                        FlyLog.e(e.toString());
+//                    }
+//
+//                    boolean isElink = false;
+//                    try {
+//                        isElink = appInfo.className.contains("net.easyconn");
+//                    } catch (Exception e) {
+//                        FlyLog.e(e.toString());
+//                    }
 
-                    boolean isElink = false;
-                    try {
-                        isElink = appInfo.className.contains("net.easyconn");
-                    } catch (Exception e) {
-                        FlyLog.e(e.toString());
-                    }
 
-
-                    if (isGaode) {
-                        drawable = mContext.getResources().getDrawable(R.drawable.jancar_nav);
-                    }else if(isElink){
-                        drawable = mContext.getResources().getDrawable(R.drawable.jancar_elink);
-                    } else {
+//                    if (isGaode) {
+//                        drawable = mContext.getResources().getDrawable(R.drawable.jancar_nav);
+//                    }else if(isElink){
+//                        drawable = mContext.getResources().getDrawable(R.drawable.jancar_elink);
+//                    } else {
                         drawable = mUserManager.getBadgedDrawableForUser(appInfo.loadIcon(mPackageManager), user);
-                    }
+//                    }
                     entry.icon = Utilities.create3rdIconBitmap(drawable, mContext);
                     entry.title = appInfo.loadLabel(mPackageManager);
                     entry.contentDescription = mUserManager.getBadgedLabelForUser(entry.title, user);

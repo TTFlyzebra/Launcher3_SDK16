@@ -1,4 +1,4 @@
-package com.android.flyzebra.data;
+package com.jancar.flyzebra.data;
 
 import android.animation.TimeInterpolator;
 import android.view.View;

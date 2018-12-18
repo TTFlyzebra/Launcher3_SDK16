@@ -49,7 +49,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.android.flyzebra.FlyLog;
+import com.jancar.flyzebra.FlyLog;
 import com.android.launcher3.AutoInstallsLayout.LayoutParserCallback;
 import com.android.launcher3.LauncherSettings.Favorites;
 import com.android.launcher3.compat.UserHandleCompat;
@@ -403,7 +403,7 @@ public class LauncherProvider extends ContentProvider {
         SharedPreferences sp = getContext().getSharedPreferences(spKey, Context.MODE_PRIVATE);
 
         if (sp.getBoolean(EMPTY_DATABASE_CREATED, false)) {
-            Log.d(TAG, "loading default workspace");
+            FlyLog.e( "loading default workspace");
 
             AutoInstallsLayout loader = createWorkspaceLoaderFromAppRestriction();
             if (loader == null) {

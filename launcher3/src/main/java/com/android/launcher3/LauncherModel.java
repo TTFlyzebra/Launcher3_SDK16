@@ -48,8 +48,8 @@ import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.Pair;
 
-import com.android.flyzebra.FlyLog;
-import com.android.flyzebra.LaunActivityUtil;
+import com.jancar.flyzebra.FlyLog;
+import com.jancar.flyzebra.LaunActivityUtil;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherActivityInfoCompat;
 import com.android.launcher3.compat.LauncherAppsCompat;

@@ -1,4 +1,4 @@
-package com.android.flyzebra;
+package com.jancar.flyzebra;
 
 import android.util.Log;
 

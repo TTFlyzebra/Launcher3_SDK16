@@ -74,29 +74,23 @@
             launcher:packageName="com.jancar.bluetooth.phone" />
     </resolve>
 
-    <resolve
-        launcher:container="-100"
+    <appwidget
+        launcher:className="com.jancar.widget.DateWidget"
+        launcher:packageName="com.android.launcher3"
         launcher:screen="0"
         launcher:spanX="2"
         launcher:spanY="2"
         launcher:x="0"
-        launcher:y="0">
-        <favorite
-            launcher:className="com.jancar.widget.DateWidget"
-            launcher:packageName="com.android.launcher3" />
-    </resolve>
+        launcher:y="0" />
 
-
-    <resolve
+    <appwidget
+        launcher:className="com.jancar.widget.MediaWidget"
         launcher:container="-100"
+        launcher:packageName="com.android.launcher3"
         launcher:screen="0"
         launcher:spanX="3"
         launcher:spanY="2"
         launcher:x="2"
-        launcher:y="0">
-        <favorite
-            launcher:className="com.jancar.widget.MediaWidget"
-            launcher:packageName="com.android.launcher3" />
-    </resolve>
+        launcher:y="0" />
 
 </favorites>

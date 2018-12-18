@@ -5,15 +5,20 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.text.TextUtils;
 
-import com.android.flyzebra.FlyLog;
-import com.android.flyzebra.LaunActivityUtil;
+import com.jancar.flyzebra.FlyLog;
+import com.jancar.flyzebra.LaunActivityUtil;
+import com.jancar.flyzebra.XmlUtil;
+import com.jancar.flyzebra.data.WorkItem;
 import com.android.launcher3.compat.UserHandleCompat;
 import com.android.launcher3.compat.UserManagerCompat;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,6 +51,30 @@ public class LauncherLoadingDB {
 
     public void start(final Context context) {
         FlyLog.d("start");
+        File file = new File("/jancar/config/source_list.xml");
+        FileInputStream ins = null;
+        List<WorkItem> list = null;
+        try {
+            ins = new FileInputStream(file);
+            list = XmlUtil.parse(
+                    ins,
+                    WorkItem.class,
+                    new String[]{"name", "packageName", "activity"},
+                    new String[]{"name", "packages", "activity"},
+                    "item");
+            FlyLog.d("list=" + list.toString());
+        } catch (FileNotFoundException e) {
+            FlyLog.e(e.toString());
+        } finally {
+            if (ins != null) {
+                try {
+                    ins.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         LauncherAppState.getLauncherProvider().loadDefaultFavoritesIfNecessary();
         allLauncherActivitys = LaunActivityUtil.getAppInfos(null, context, launcherAppState.getIconCache());
 
@@ -77,7 +106,8 @@ public class LauncherLoadingDB {
      */
     private void checkItems(Context mContext) {
         if (allLauncherActivitys != null && !allLauncherActivitys.isEmpty()) {
-            SharedPreferences sp = mContext.getSharedPreferences(LauncherAppState.getSharedPreferencesKey(), Context.MODE_PRIVATE);
+//            SharedPreferences sp = mContext.getSharedPreferences(LauncherAppState.getSharedPreferencesKey(), Context.MODE_PRIVATE);
+            FlyLog.e("allLauncherActivitys size=%d", allLauncherActivitys.size());
             checkFavorites(mContext, allLauncherActivitys);
         }
     }
@@ -88,11 +118,11 @@ public class LauncherLoadingDB {
         Cursor c = cr.query(LauncherSettings.Favorites.CONTENT_URI, null, null, null, null);
         ArrayList<AppInfo> favoritesApps = new ArrayList<>();
         try {
-            while (c.moveToNext()) {
+            while (c != null && c.moveToNext()) {
                 final int idIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites._ID);
                 final int intentIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.INTENT);
                 final int titleIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.TITLE);
-//                final int containerIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.CONTAINER);
+                final int containerIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.CONTAINER);
 //                final int itemTypeIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.ITEM_TYPE);
 //                final int appWidgetIdIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.APPWIDGET_ID);
 //                final int appWidgetProviderIndex = c.getColumnIndexOrThrow(LauncherSettings.Favorites.APPWIDGET_PROVIDER);
@@ -118,6 +148,7 @@ public class LauncherLoadingDB {
                     continue;
                 }
                 info.screenId = c.getInt(screenIndex);
+                info.container = c.getInt(containerIndex);
                 info.cellX = c.getInt(cellXIndex);
                 info.cellY = c.getInt(cellYIndex);
                 info.title = c.getString(titleIndex);
@@ -132,6 +163,8 @@ public class LauncherLoadingDB {
             }
         }
 
+        FlyLog.e("sqlite favoritesApps size=%d", favoritesApps.size());
+
         //先删除
         int sum = favoritesApps.size();
         for (int i = sum - 1; i >= 0; i--) {
@@ -141,7 +174,7 @@ public class LauncherLoadingDB {
                 try {
                     ComponentName it1 = workInfo.intent.getComponent();
                     ComponentName it2 = appInfo.intent.getComponent();
-                    if (it1.compareTo(it2) == 0) {
+                    if (it1 != null && it1.compareTo(it2) == 0) {
                         isFind = true;
                         break;
                     }
@@ -168,25 +201,26 @@ public class LauncherLoadingDB {
          * 查找workspace上的最后一个图标位置
          */
         Hashtable<String, Integer> lastPos = new Hashtable<>();
-        int screen = 0;
+        int screen = 1;
         LauncherAppState app = LauncherAppState.getInstance();
         InvariantDeviceProfile profile = app.getInvariantDeviceProfile();
         int cellx = profile.numColumns - 1;
         int celly = profile.numRows - 1;
         if (!favoritesApps.isEmpty()) {
-            screen = (int) favoritesApps.get(0).screenId;
-            cellx = favoritesApps.get(0).cellX;
-            celly = favoritesApps.get(0).cellY;
             for (AppInfo appInfo : favoritesApps) {
-                if ((appInfo.screenId * 10000 + appInfo.cellY * 100 + appInfo.cellX) > (screen * 10000 + celly * 100 + cellx)) {
+                if (appInfo.container != 100) {
+                    continue;
+                }
+                int tempCellx = appInfo.cellX + appInfo.spanX - 1;
+                int tempCelly = appInfo.cellY + appInfo.spanY - 1;
+                if ((appInfo.screenId * 10000 + tempCelly * 100 + tempCellx) > (screen * 10000 + celly * 100 + cellx)) {
                     screen = (int) appInfo.screenId;
-                    cellx = appInfo.cellX;
-                    celly = appInfo.cellY;
+                    cellx = tempCellx;
+                    celly = tempCelly;
                 }
             }
         } else {
             try {
-                screen = 1;
                 ContentValues v = new ContentValues();
                 v.put(LauncherSettings.WorkspaceScreens._ID, 1);
                 v.put(LauncherSettings.WorkspaceScreens.SCREEN_RANK, 0);
@@ -208,7 +242,7 @@ public class LauncherLoadingDB {
                 try {
                     ComponentName it1 = favoritesApps.get(i).intent.getComponent();
                     ComponentName it2 = appInfo.intent.getComponent();
-                    if (it1.compareTo(it2) == 0) {
+                    if (it1 != null && it1.compareTo(it2) == 0) {
                         isFind = true;
                         break;
                     }

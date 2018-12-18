@@ -84,7 +84,7 @@
                         android:id="@+id/wg_music_prev"
                         android:layout_width="42px"
                         android:layout_height="38px"
-                        android:src="@drawable/media_prev_01" />
+                        android:src="@drawable/media_prev" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -97,7 +97,7 @@
                         android:id="@+id/wg_music_play"
                         android:layout_width="42px"
                         android:layout_height="38px"
-                        android:src="@drawable/media_play_01" />
+                        android:src="@drawable/media_play" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -110,7 +110,7 @@
                         android:id="@+id/wg_music_next"
                         android:layout_width="42px"
                         android:layout_height="38px"
-                        android:src="@drawable/media_next_01" />
+                        android:src="@drawable/media_next" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -141,6 +141,7 @@
                 android:layout_height="100px">
 
                 <TextView
+                    android:id="@+id/wg_fm_tv01"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -151,6 +152,7 @@
                     android:textSize="22px" />
 
                 <TextView
+                    android:id="@+id/wg_fm_tv02"
                     android:paddingTop="22px"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -162,6 +164,7 @@
                     android:textSize="64px" />
 
                 <TextView
+                    android:id="@+id/wg_fm_tv03"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -189,7 +192,7 @@
                         android:id="@+id/wg_fm_prev"
                         android:layout_width="42px"
                         android:layout_height="38px"
-                        android:src="@drawable/media_prev_01" />
+                        android:src="@drawable/media_prev" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -202,7 +205,7 @@
                         android:id="@+id/wg_fm_next"
                         android:layout_width="42px"
                         android:layout_height="38px"
-                        android:src="@drawable/media_next_01" />
+                        android:src="@drawable/media_next" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

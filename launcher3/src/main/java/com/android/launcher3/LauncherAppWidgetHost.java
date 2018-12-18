@@ -24,7 +24,7 @@ import android.os.TransactionTooLargeException;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.android.flyzebra.FlyLog;
+import com.jancar.flyzebra.FlyLog;
 
 import java.util.ArrayList;
 

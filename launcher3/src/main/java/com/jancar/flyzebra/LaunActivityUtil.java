@@ -1,8 +1,8 @@
-package com.android.flyzebra;
+package com.jancar.flyzebra;
 
 import android.content.Context;
 
-import com.android.flyzebra.data.Const;
+import com.jancar.flyzebra.data.Const;
 import com.android.launcher3.AppInfo;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.compat.LauncherActivityInfoCompat;
