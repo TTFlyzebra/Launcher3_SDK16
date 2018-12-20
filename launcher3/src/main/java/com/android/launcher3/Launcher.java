@@ -525,6 +525,13 @@ public class Launcher extends Activity
 //            showFirstRunActivity();
 //            showFirstRunClings();
 //        }
+
+        /**
+         * 检测并加载所有应用图标
+         */
+        LauncherLoadingDB launcherLoadingDB = new LauncherLoadingDB(LauncherAppState.getInstance());
+        launcherLoadingDB.setOnListener(this);
+        launcherLoadingDB.start(this);
     }
 
     @Override
@@ -999,12 +1006,6 @@ public class Launcher extends Activity
     @Override
     protected void onStart() {
         super.onStart();
-        /**
-         * 检测并加载所有应用图标
-         */
-        LauncherLoadingDB launcherLoadingDB = new LauncherLoadingDB(LauncherAppState.getInstance());
-        launcherLoadingDB.setOnListener(this);
-        launcherLoadingDB.start(this);
 
         FirstFrameAnimatorHelper.setIsVisible(true);
 

@@ -18,6 +18,7 @@ import android.widget.RemoteViews;
 
 import com.android.launcher3.R;
 import com.jancar.media.JacMediaController;
+import com.jancar.source.Page;
 import com.jancar.widget.MediaWidget;
 import com.jancar.widget.utils.FlyLog;
 
@@ -25,9 +26,7 @@ import java.util.Locale;
 
 public class MediaWidgetService extends Service {
     private JacMediaController controller;
-    private static final int SHOW_MUSIC = 0;
-    private static final int SHOW_FM = 1;
-    private int mSession = SHOW_MUSIC;
+    private String mSession = Page.PAGE_MUSIC;
     private String mTitle = "";
     private long mCurrent;
     private long mDuration;
@@ -62,20 +61,7 @@ public class MediaWidgetService extends Service {
             @Override
             public void onSession(String page) {
                 FlyLog.d("onSession page=%s", page);
-                RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.wg_media_widget);
-                switch (page) {
-                    case "music":
-                    case "a2dp":
-                        mSession = SHOW_MUSIC;
-                        break;
-                    case "fm":
-                        mSession = SHOW_FM;
-                        break;
-                    default:
-                        mSession = SHOW_MUSIC;
-                        break;
-
-                }
+                mSession = page;
                 upWidgetView();
             }
 
@@ -101,7 +87,6 @@ public class MediaWidgetService extends Service {
             @Override
             public void onProgress(long current, long duration) {
 //                FlyLog.d("onProgress current=%d,duration=%d", current, duration);
-                mSession = SHOW_MUSIC;
                 mCurrent = current;
                 mDuration = duration;
                 upWidgetView();
@@ -120,7 +105,6 @@ public class MediaWidgetService extends Service {
             @Override
             public void onID3(String title, String artist, String album, byte[] artWork) {
                 FlyLog.d("onID3 title=%s,artist=%s,album=%s", title, artist, album);
-                mSession = SHOW_MUSIC;
                 mTitle = title;
                 if (artWork == null) {
                     mBitmap = null;
@@ -133,7 +117,6 @@ public class MediaWidgetService extends Service {
             @Override
             public void onMediaEvent(String action, Bundle extras) {
                 FlyLog.d("onMediaEvent action=%s,extras=" + extras, action);
-                mSession = SHOW_FM;
                 try {
                     int fmType = extras.getInt("Band");
                     fmText = fmType == 0 ? "FM1" : fmType == 1 ? "FM2" : fmType == 2 ? "FM3" : fmType == 3 ? "AM1" : "AM2";
@@ -191,7 +174,7 @@ public class MediaWidgetService extends Service {
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.wg_media_widget);
         //更新是MUSIC -FM
         switch (mSession) {
-            case SHOW_FM:
+            case Page.PAGE_FM:
                 remoteViews.setViewVisibility(R.id.wg_music, View.GONE);
                 remoteViews.setViewVisibility(R.id.wg_radio, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.wg_fm_tv01, fmText);
@@ -203,7 +186,8 @@ public class MediaWidgetService extends Service {
                         PendingIntent.getBroadcast(this, 0, new Intent(ACTION_PREV), 0));
                 FlyLog.d("upWidgetView fm");
                 break;
-            case SHOW_MUSIC:
+            case Page.PAGE_MUSIC:
+            case Page.PAGE_A2DP:
                 remoteViews.setViewVisibility(R.id.wg_music, View.VISIBLE);
                 remoteViews.setViewVisibility(R.id.wg_radio, View.GONE);
                 //更新标题
@@ -218,7 +202,8 @@ public class MediaWidgetService extends Service {
 
                 //更新图片
                 if (mBitmap == null) {
-                    remoteViews.setImageViewResource(R.id.media_id3img, R.drawable.media_music);
+                    remoteViews.setImageViewResource(R.id.media_id3img,
+                            Page.PAGE_MUSIC.endsWith(mSession)?R.drawable.mediainfo_music_default:R.drawable.mediainfo_bt_default);
                 } else {
                     remoteViews.setImageViewBitmap(R.id.media_id3img, mBitmap);
                 }
