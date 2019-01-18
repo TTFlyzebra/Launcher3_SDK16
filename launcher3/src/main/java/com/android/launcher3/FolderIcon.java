@@ -29,6 +29,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,23 +45,27 @@ import android.widget.TextView;
 import com.android.launcher3.DropTarget.DragObject;
 import com.android.launcher3.FolderInfo.FolderListener;
 import com.android.launcher3.util.Thunk;
+import com.jancar.widget.utils.FlyLog;
 
 import java.util.ArrayList;
 
 /**
- * An icon that can appear on in the workspace representing an {@link UserFolder}.
+ * An icon that can appear on in the workspace representing an {@link }.
  */
 public class FolderIcon extends FrameLayout implements FolderListener {
-    @Thunk Launcher mLauncher;
-    @Thunk Folder mFolder;
+    @Thunk
+    Launcher mLauncher;
+    @Thunk
+    Folder mFolder;
     private FolderInfo mInfo;
-    @Thunk static boolean sStaticValuesDirty = true;
+    @Thunk
+    static boolean sStaticValuesDirty = true;
 
     private CheckLongPressHelper mLongPressHelper;
     private StylusEventHelper mStylusEventHelper;
 
     // The number of icons to display in the
-    public static final int NUM_ITEMS_IN_PREVIEW = 3;
+    public static final int NUM_ITEMS_IN_PREVIEW = 4;
     private static final int CONSUMPTION_ANIMATION_DURATION = 100;
     private static final int DROP_IN_ANIMATION_DURATION = 400;
     private static final int INITIAL_ITEM_ANIMATION_DURATION = 350;
@@ -73,7 +78,7 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     private static final float OUTER_RING_GROWTH_FACTOR = 0.3f;
 
     // The amount of vertical spread between items in the stack [0...1]
-    private static final float PERSPECTIVE_SHIFT_FACTOR = 0.18f;
+    private static final float PERSPECTIVE_SHIFT_FACTOR = 1.2f;
 
     // Flag as to whether or not to draw an outer ring. Currently none is designed.
     public static final boolean HAS_OUTER_RING = true;
@@ -90,8 +95,10 @@ public class FolderIcon extends FrameLayout implements FolderListener {
 
     public static Drawable sSharedFolderLeaveBehind = null;
 
-    @Thunk ImageView mPreviewBackground;
-    @Thunk BubbleTextView mFolderName;
+    @Thunk
+    ImageView mPreviewBackground;
+    @Thunk
+    BubbleTextView mFolderName;
 
     FolderRingAnimator mFolderRingAnimator = null;
 
@@ -111,11 +118,14 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     private float mSlop;
 
     private PreviewItemDrawingParams mParams = new PreviewItemDrawingParams(0, 0, 0, 0);
-    @Thunk PreviewItemDrawingParams mAnimParams = new PreviewItemDrawingParams(0, 0, 0, 0);
-    @Thunk ArrayList<ShortcutInfo> mHiddenItems = new ArrayList<ShortcutInfo>();
+    @Thunk
+    PreviewItemDrawingParams mAnimParams = new PreviewItemDrawingParams(0, 0, 0, 0);
+    @Thunk
+    ArrayList<ShortcutInfo> mHiddenItems = new ArrayList<ShortcutInfo>();
 
     private Alarm mOpenAlarm = new Alarm();
-    @Thunk ItemInfo mDragInfo;
+    @Thunk
+    ItemInfo mDragInfo;
 
     public FolderIcon(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -141,7 +151,7 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     }
 
     static FolderIcon fromXml(int resId, Launcher launcher, ViewGroup group,
-            FolderInfo folderInfo, IconCache iconCache) {
+                              FolderInfo folderInfo, IconCache iconCache) {
         @SuppressWarnings("all") // suppress dead code warning
         final boolean error = INITIAL_ITEM_ANIMATION_DURATION >= DROP_IN_ANIMATION_DURATION;
         if (error) {
@@ -155,7 +165,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
         FolderIcon icon = (FolderIcon) LayoutInflater.from(launcher).inflate(resId, group, false);
         icon.setClipToPadding(false);
         icon.mFolderName = (BubbleTextView) icon.findViewById(R.id.folder_icon_name);
-        icon.mFolderName.setText(folderInfo.title);
+        String str = launcher.getResources().getString(R.string.folder_hint_text);
+        icon.mFolderName.setText(TextUtils.isEmpty(folderInfo.title)?str:folderInfo.title);
         icon.mFolderName.setCompoundDrawablePadding(0);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) icon.mFolderName.getLayoutParams();
         lp.topMargin = grid.iconSizePx + grid.iconDrawablePaddingPx;
@@ -195,7 +206,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     public static class FolderRingAnimator {
         public int mCellX;
         public int mCellY;
-        @Thunk CellLayout mCellLayout;
+        @Thunk
+        CellLayout mCellLayout;
         public float mOuterRingSize;
         public float mInnerRingSize;
         public FolderIcon mFolderIcon = null;
@@ -380,8 +392,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     };
 
     public void performCreateAnimation(final ShortcutInfo destInfo, final View destView,
-            final ShortcutInfo srcInfo, final DragView srcView, Rect dstRect,
-            float scaleRelativeToDragLayer, Runnable postAnimationRunnable) {
+                                       final ShortcutInfo srcInfo, final DragView srcView, Rect dstRect,
+                                       float scaleRelativeToDragLayer, Runnable postAnimationRunnable) {
 
         // These correspond two the drawable and view that the icon was dropped _onto_
         Drawable animateDrawable = getTopDrawable((TextView) destView);
@@ -418,8 +430,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     }
 
     private void onDrop(final ShortcutInfo item, DragView animateView, Rect finalRect,
-            float scaleRelativeToDragLayer, int index, Runnable postAnimationRunnable,
-            DragObject d) {
+                        float scaleRelativeToDragLayer, int index, Runnable postAnimationRunnable,
+                        DragObject d) {
         item.cellX = -1;
         item.cellY = -1;
 
@@ -453,7 +465,7 @@ public class FolderIcon extends FrameLayout implements FolderListener {
             center[1] = (int) Math.round(scaleRelativeToDragLayer * center[1]);
 
             to.offset(center[0] - animateView.getMeasuredWidth() / 2,
-                      center[1] - animateView.getMeasuredHeight() / 2);
+                    center[1] - animateView.getMeasuredHeight() / 2);
 
             float finalAlpha = index < NUM_ITEMS_IN_PREVIEW ? 0.5f : 0f;
 
@@ -526,6 +538,7 @@ public class FolderIcon extends FrameLayout implements FolderListener {
             this.scale = scale;
             this.overlayAlpha = overlayAlpha;
         }
+
         float transX;
         float transY;
         float scale;
@@ -546,23 +559,64 @@ public class FolderIcon extends FrameLayout implements FolderListener {
         return mParams.scale;
     }
 
+//    private PreviewItemDrawingParams computePreviewItemDrawingParams(int index,
+//            PreviewItemDrawingParams params) {
+//        index = NUM_ITEMS_IN_PREVIEW - index - 1;
+//        float r = (index * 1.0f) / (NUM_ITEMS_IN_PREVIEW - 1);
+//        float scale = (1 - PERSPECTIVE_SCALE_FACTOR * (1 - r));
+//
+//        float offset = (1 - r) * mMaxPerspectiveShift;
+//        float scaledSize = scale * mBaselineIconSize;
+//        float scaleOffsetCorrection = (1 - scale) * mBaselineIconSize;
+//
+//        // We want to imagine our coordinates from the bottom left, growing up and to the
+//        // right. This is natural for the x-axis, but for the y-axis, we have to invert things.
+//        float transY = mAvailableSpaceInPreview - (offset + scaledSize + scaleOffsetCorrection) + getPaddingTop();
+//        float transX = (mAvailableSpaceInPreview - scaledSize) / 2;
+//        float totalScale = mBaselineIconScale * scale;
+//        final int overlayAlpha = (int) (80 * (1 - r));
+//
+//        if (params == null) {
+//            params = new PreviewItemDrawingParams(transX, transY, totalScale, overlayAlpha);
+//        } else {
+//            params.transX = transX;
+//            params.transY = transY;
+//            params.scale = totalScale;
+//            params.overlayAlpha = overlayAlpha;
+//        }
+//        FlyLog.d("params transX=%f,transY=%f,scale=%f,overlayAlpha=%d",params.transX,params.transY,params.scale,params.overlayAlpha);
+//        return params;
+//    }
+
     private PreviewItemDrawingParams computePreviewItemDrawingParams(int index,
-            PreviewItemDrawingParams params) {
+                                                                     PreviewItemDrawingParams params) {
+        /*add start*/
+        int index_order = index;
+        final int previewPadding = FolderRingAnimator.sPreviewPadding;
+        /*add end*/
+
         index = NUM_ITEMS_IN_PREVIEW - index - 1;
         float r = (index * 1.0f) / (NUM_ITEMS_IN_PREVIEW - 1);
         float scale = (1 - PERSPECTIVE_SCALE_FACTOR * (1 - r));
-
         float offset = (1 - r) * mMaxPerspectiveShift;
         float scaledSize = scale * mBaselineIconSize;
         float scaleOffsetCorrection = (1 - scale) * mBaselineIconSize;
 
         // We want to imagine our coordinates from the bottom left, growing up and to the
         // right. This is natural for the x-axis, but for the y-axis, we have to invert things.
-        float transY = mAvailableSpaceInPreview - (offset + scaledSize + scaleOffsetCorrection) + getPaddingTop();
-        float transX = (mAvailableSpaceInPreview - scaledSize) / 2;
-        float totalScale = mBaselineIconScale * scale;
-        final int overlayAlpha = (int) (80 * (1 - r));
+        float transY = mAvailableSpaceInPreview - (offset + scaledSize + scaleOffsetCorrection);
+        float transX = offset + scaleOffsetCorrection;
 
+        //计算图标的位置
+        if (0 <= index_order && index_order < 2) { // 0 1
+            transX = index_order * mBaselineIconSize + 18;
+            transY = mAvailableSpaceInPreview - (2 * mBaselineIconSize + scaledSize + scaleOffsetCorrection) + getPaddingTop()+45;
+        } else if (2 <= index_order && index_order < 4) { // 2 3
+            transX = (index_order - 2) * mBaselineIconSize + 18;
+            transY = mAvailableSpaceInPreview - (1 * mBaselineIconSize + scaledSize + scaleOffsetCorrection) + getPaddingTop()+45;
+        }
+        final int overlayAlpha = (int) (80 * (1 - r));
+        float totalScale = mBaselineIconScale * 1 - 0.1f;//图标大小保持不变
         if (params == null) {
             params = new PreviewItemDrawingParams(transX, transY, totalScale, overlayAlpha);
         } else {
@@ -642,17 +696,17 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     }
 
     private void animateFirstItem(final Drawable d, int duration, final boolean reverse,
-            final Runnable onCompleteRunnable) {
+                                  final Runnable onCompleteRunnable) {
         final PreviewItemDrawingParams finalParams = computePreviewItemDrawingParams(0, null);
 
         float iconSize = mLauncher.getDeviceProfile().iconSizePx;
-        final float scale0 = iconSize / d.getIntrinsicWidth() ;
+        final float scale0 = iconSize / d.getIntrinsicWidth();
         final float transX0 = (mAvailableSpaceInPreview - iconSize) / 2;
         final float transY0 = (mAvailableSpaceInPreview - iconSize) / 2 + getPaddingTop();
         mAnimParams.drawable = d;
 
         ValueAnimator va = LauncherAnimUtils.ofFloat(this, 0f, 1.0f);
-        va.addUpdateListener(new AnimatorUpdateListener(){
+        va.addUpdateListener(new AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 float progress = (Float) animation.getAnimatedValue();
                 if (reverse) {
@@ -671,6 +725,7 @@ public class FolderIcon extends FrameLayout implements FolderListener {
             public void onAnimationStart(Animator animation) {
                 mAnimating = true;
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 mAnimating = false;
@@ -711,9 +766,14 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     }
 
     public void onTitleChanged(CharSequence title) {
-        mFolderName.setText(title);
-        setContentDescription(String.format(getContext().getString(R.string.folder_name_format),
-                title));
+        try {
+            String str = getContext().getResources().getString(R.string.folder_hint_text);
+            mFolderName.setText(TextUtils.isEmpty(title) ? str : title);
+            setContentDescription(String.format(getContext().getString(R.string.folder_name_format),
+                    title));
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
     }
 
     @Override

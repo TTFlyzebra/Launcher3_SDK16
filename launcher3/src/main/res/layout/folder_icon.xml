@@ -25,8 +25,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:antialias="true"
-        android:src="@drawable/portal_ring_inner"/>
+        android:antialias="true"/>
     <com.android.launcher3.BubbleTextView
         style="@style/Icon"
         android:id="@+id/folder_icon_name"
