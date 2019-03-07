@@ -30,8 +30,7 @@
                 android:maxLines="1"
                 android:gravity="center"
                 android:textColor="#FFF"
-                android:textSize="24px"
-                android:text="" />
+                android:textSize="24px"/>
 
             <ProgressBar
                 android:id="@+id/media_music_progressbar"
@@ -52,7 +51,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="00:00"
                     android:textColor="#FFF"
                     android:textSize="18px" />
 
@@ -61,7 +59,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="00:00"
                     android:textColor="#FFF"
                     android:textSize="18px" />
 
@@ -147,7 +144,6 @@
                     android:layout_alignParentTop="true"
                     android:gravity="start"
                     android:maxLines="1"
-                    android:text="FM"
                     android:textColor="#FFF"
                     android:textSize="22px" />
 
@@ -159,7 +155,6 @@
                     android:layout_alignParentStart="true"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="87.50"
                     android:textColor="#FFF"
                     android:textSize="64px" />
 
@@ -170,7 +165,6 @@
                     android:layout_alignParentBottom="true"
                     android:gravity="end"
                     android:maxLines="1"
-                    android:text="MHZ"
                     android:textColor="#FFF"
                     android:textSize="22px" />
             </RelativeLayout>
