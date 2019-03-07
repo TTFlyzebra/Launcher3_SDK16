@@ -18,7 +18,7 @@ LOCAL_AAPT_FLAGS := \
     --extra-packages android.support.v7.recyclerview
 LOCAL_OVERRIDES_PACKAGES := Home Launcher Launcher2
 LOCAL_PRIVILEGED_MODULE := true
-LOCAL_PACKAGE_NAME := JAC-Appstore
+LOCAL_PACKAGE_NAME := JAC-Launcher3
 LOCAL_CERTIFICATE := platform
 include $(BUILD_PACKAGE)
 endif
