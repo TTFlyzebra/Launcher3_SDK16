@@ -6,7 +6,7 @@ import android.util.Log;
  * Created by FlyZebra on 2018/3/28-下午3:28.
  */
 public class FlyLog {
-    public static final String TAG = "fly.jancar.widget";
+    public static final String TAG = "JAC-Laun3";
     public static String[] filter = {
     };
 

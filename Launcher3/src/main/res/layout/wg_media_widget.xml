@@ -15,7 +15,7 @@
             android:layout_width="124px"
             android:layout_height="124px"
             android:scaleType="fitCenter"
-            android:src="@drawable/media_radio" />
+            android:src="@drawable/mediainfo_music_default" />
 
         <LinearLayout
             android:layout_width="280px"
