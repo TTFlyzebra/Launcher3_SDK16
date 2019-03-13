@@ -99,4 +99,11 @@
     <string name="action_decrease_width" msgid="1374549771083094654">"减小宽度"</string>
     <string name="action_decrease_height" msgid="282377193880900022">"减小高度"</string>
     <string name="widget_resized" msgid="9130327887929620">"小部件尺寸已调整为：宽度 <xliff:g id="NUMBER_0">%1$s</xliff:g>，高度 <xliff:g id="NUMBER_1">%2$s</xliff:g>"</string>
+    <string name="tv_str_sunday">星期日</string>
+    <string name="tv_str_monday">星期一</string>
+    <string name="tv_str_tuesday">星期二</string>
+    <string name="tv_str_wednesday">星期三</string>
+    <string name="tv_str_thursday">星期四</string>
+    <string name="tv_str_friday">星期五</string>
+    <string name="tv_str_saturday">星期六</string>
 </resources>

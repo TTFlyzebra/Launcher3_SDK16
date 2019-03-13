@@ -99,4 +99,11 @@
     <string name="action_decrease_width" msgid="1374549771083094654">"Diminuir largura"</string>
     <string name="action_decrease_height" msgid="282377193880900022">"Diminuir altura"</string>
     <string name="widget_resized" msgid="9130327887929620">"Widget redimensionado para a largura <xliff:g id="NUMBER_0">%1$s</xliff:g>, altura <xliff:g id="NUMBER_1">%2$s</xliff:g>"</string>
+    <string name="tv_str_sunday">domingo</string>
+    <string name="tv_str_monday">Segunda-feira</string>
+    <string name="tv_str_tuesday">terça</string>
+    <string name="tv_str_wednesday">Quarta-feira</string>
+    <string name="tv_str_thursday">Quinta-feira</string>
+    <string name="tv_str_friday">Sexta-feira</string>
+    <string name="tv_str_saturday">sábado</string>
 </resources>

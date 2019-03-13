@@ -14,12 +14,12 @@ import com.jancar.widget.utils.FlyLog;
 public class MediaWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        FlyLog.e("onUpdate");
+        FlyLog.d("onUpdate");
     }
 
     @Override
     public void onEnabled(Context context) {
-        FlyLog.e("onEnabled");
+        FlyLog.d("onEnabled");
         try {
             context.startService(new Intent(context, MediaWidgetService.class));
         }catch (Exception e){
@@ -29,7 +29,7 @@ public class MediaWidget extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        FlyLog.e("onDisabled");
+        FlyLog.d("onDisabled");
         try{
             context.stopService(new Intent(context, MediaWidgetService.class));
         }catch (Exception e){
@@ -39,7 +39,7 @@ public class MediaWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        FlyLog.e("onReceive intent="+intent);
+        FlyLog.d("onReceive intent="+intent);
         super.onReceive(context, intent);
     }
 }

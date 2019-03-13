@@ -107,7 +107,7 @@ public class LauncherLoadingDB {
     private void checkItems(Context mContext) {
         if (allLauncherActivitys != null && !allLauncherActivitys.isEmpty()) {
 //            SharedPreferences sp = mContext.getSharedPreferences(LauncherAppState.getSharedPreferencesKey(), Context.MODE_PRIVATE);
-            FlyLog.e("allLauncherActivitys size=%d", allLauncherActivitys.size());
+            FlyLog.d("allLauncherActivitys size=%d", allLauncherActivitys.size());
             checkFavorites(mContext, allLauncherActivitys);
         }
     }
@@ -163,7 +163,7 @@ public class LauncherLoadingDB {
             }
         }
 
-        FlyLog.e("sqlite favoritesApps size=%d", favoritesApps.size());
+        FlyLog.d("sqlite favoritesApps size=%d", favoritesApps.size());
 
         //先删除
         int sum = favoritesApps.size();

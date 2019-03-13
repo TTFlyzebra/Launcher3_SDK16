@@ -2642,10 +2642,11 @@ public class Workspace extends PagedView
 
                 // If the item being dropped is a shortcut and the nearest drop
                 // cell also contains a shortcut, then create a folder with the two shortcuts.
-                if (!mInScrollArea && createUserFolderIfNecessary(cell, container,
-                        dropTargetLayout, mTargetCell, distance, false, d.dragView, null)) {
-                    return;
-                }
+                //@FlyZebra no dorp an icon
+//                if (!mInScrollArea && createUserFolderIfNecessary(cell, container,
+//                        dropmanageFolderFeedbackTargetLayout, mTargetCell, distance, false, d.dragView, null)) {
+//                    return;
+//                }
 
                 if (addToExistingFolderIfNecessary(cell, dropTargetLayout, mTargetCell,
                         distance, d, false)) {
@@ -3273,8 +3274,11 @@ public class Workspace extends PagedView
         if (mDragMode == DRAG_MODE_NONE && userFolderPending &&
                 !mFolderCreationAlarm.alarmPending()) {
 
+            //@FlyZebra cancle drop an icon anime
+//            FolderCreationAlarmListener listener = new
+//                    FolderCreationAlarmListener(targetLayout, targetCell[0], targetCell[1]);
             FolderCreationAlarmListener listener = new
-                    FolderCreationAlarmListener(targetLayout, targetCell[0], targetCell[1]);
+                    FolderCreationAlarmListener(targetLayout, 18, 18);
 
             if (!accessibleDrag) {
                 mFolderCreationAlarm.setOnAlarmListener(listener);

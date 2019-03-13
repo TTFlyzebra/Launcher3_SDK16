@@ -68,7 +68,7 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
 
     @Override
     public void startListening() {
-        FlyLog.e("startListening start");
+        FlyLog.d("startListening start");
         try {
             super.startListening();
         } catch (Exception e) {
@@ -81,12 +81,12 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
                 throw new RuntimeException(e);
             }
         }
-        FlyLog.e("startListening end");
+        FlyLog.d("startListening end");
     }
 
     @Override
     public void stopListening() {
-        FlyLog.e("stopListening");
+        FlyLog.d("stopListening");
         super.stopListening();
         clearViews();
     }

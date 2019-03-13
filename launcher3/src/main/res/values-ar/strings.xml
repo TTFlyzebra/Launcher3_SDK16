@@ -99,4 +99,11 @@
     <string name="action_decrease_width" msgid="1374549771083094654">"تقليل العرض"</string>
     <string name="action_decrease_height" msgid="282377193880900022">"تقليل الارتفاع"</string>
     <string name="widget_resized" msgid="9130327887929620">"تم تغيير حجم الأداة إلى العرض <xliff:g id="NUMBER_0">%1$s</xliff:g> والارتفاع <xliff:g id="NUMBER_1">%2$s</xliff:g>"</string>
+    <string name="tv_str_sunday">الأحد</string>
+    <string name="tv_str_monday">الإثنين</string>
+    <string name="tv_str_tuesday">الثلاثاء</string>
+    <string name="tv_str_wednesday">الأربعاء</string>
+    <string name="tv_str_thursday">الخميس</string>
+    <string name="tv_str_friday">يوم الجمعة</string>
+    <string name="tv_str_saturday">يوم السبت</string>
 </resources>

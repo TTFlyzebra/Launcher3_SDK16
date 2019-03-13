@@ -85,18 +85,18 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
 
     public void setup(Launcher launcher, DragController dragController) {
         dragController.addDragListener(this);
-        dragController.setFlingToDeleteDropTarget(mDeleteDropTarget);
+//        dragController.setFlingToDeleteDropTarget(mDeleteDropTarget);
 
-        dragController.addDragListener(mInfoDropTarget);
-        dragController.addDragListener(mDeleteDropTarget);
+//        dragController.addDragListener(mInfoDropTarget);
+//        dragController.addDragListener(mDeleteDropTarget);
         dragController.addDragListener(mUninstallDropTarget);
 
-        dragController.addDropTarget(mInfoDropTarget);
-        dragController.addDropTarget(mDeleteDropTarget);
+//        dragController.addDropTarget(mInfoDropTarget);
+//        dragController.addDropTarget(mDeleteDropTarget);
         dragController.addDropTarget(mUninstallDropTarget);
 
-        mInfoDropTarget.setLauncher(launcher);
-        mDeleteDropTarget.setLauncher(launcher);
+//        mInfoDropTarget.setLauncher(launcher);
+//        mDeleteDropTarget.setLauncher(launcher);
         mUninstallDropTarget.setLauncher(launcher);
     }
 
@@ -107,11 +107,13 @@ public class SearchDropTargetBar extends FrameLayout implements DragController.D
         // Get the individual components
         mDropTargetBar = findViewById(R.id.drag_target_bar);
         mInfoDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.info_target_text);
+        mInfoDropTarget.setVisibility(INVISIBLE);
         mDeleteDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.delete_target_text);
+        mDeleteDropTarget.setVisibility(INVISIBLE);
         mUninstallDropTarget = (ButtonDropTarget) mDropTargetBar.findViewById(R.id.uninstall_target_text);
 
-        mInfoDropTarget.setSearchDropTargetBar(this);
-        mDeleteDropTarget.setSearchDropTargetBar(this);
+//        mInfoDropTarget.setSearchDropTargetBar(this);
+//        mDeleteDropTarget.setSearchDropTargetBar(this);
         mUninstallDropTarget.setSearchDropTargetBar(this);
 
         // Create the various fade animations

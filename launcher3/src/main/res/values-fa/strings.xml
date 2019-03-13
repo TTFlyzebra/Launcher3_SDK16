@@ -99,4 +99,11 @@
     <string name="action_decrease_width" msgid="1374549771083094654">"کاهش عرض"</string>
     <string name="action_decrease_height" msgid="282377193880900022">"کاهش ارتفاع"</string>
     <string name="widget_resized" msgid="9130327887929620">"اندازه ابزارک به عرض <xliff:g id="NUMBER_0">%1$s</xliff:g> ارتفاع <xliff:g id="NUMBER_1">%2$s</xliff:g> تغییر کرد"</string>
+    <string name="tv_str_sunday">یکشنبه</string>
+    <string name="tv_str_monday">دوشنبه</string>
+    <string name="tv_str_tuesday">سهشنبه</string>
+    <string name="tv_str_wednesday">چهار شنبه</string>
+    <string name="tv_str_thursday">پنج شنبه</string>
+    <string name="tv_str_friday">جمعه</string>
+    <string name="tv_str_saturday">شنبه</string>
 </resources>

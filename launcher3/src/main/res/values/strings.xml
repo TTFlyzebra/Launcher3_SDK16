@@ -264,22 +264,13 @@
     <!-- Accessibility confirmation for widget resize. -->
     <string name="widget_resized">Widget resized to width <xliff:g id="number" example="2">%1$s</xliff:g> height <xliff:g id="number" example="1">%2$s</xliff:g></string>
 
-
-    <string name="appwidget_text">EXAMPLE</string>
-
     <string name="add_widget">Add widget</string>
-
     <string name="tv_str_sunday">on Sunday</string>
-
     <string name="tv_str_monday">Monday</string>
-
     <string name="tv_str_tuesday">Tuesday</string>
-
     <string name="tv_str_wednesday">Wednesday</string>
     <string name="tv_str_thursday">Thursday</string>
-
     <string name="tv_str_friday">Friday</string>
-
     <string name="tv_str_saturday">on Saturday</string>
 
 </resources>

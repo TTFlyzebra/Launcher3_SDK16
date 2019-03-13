@@ -99,4 +99,11 @@
     <string name="action_decrease_width" msgid="1374549771083094654">"Уменьшить ширину"</string>
     <string name="action_decrease_height" msgid="282377193880900022">"Уменьшить высоту"</string>
     <string name="widget_resized" msgid="9130327887929620">"Изменен размер виджета: до <xliff:g id="NUMBER_0">%1$s</xliff:g> в ширину и <xliff:g id="NUMBER_1">%2$s</xliff:g> в высоту"</string>
+    <string name="tv_str_sunday">Воскресенье</string>
+    <string name="tv_str_monday">понедельник</string>
+    <string name="tv_str_tuesday">вторник</string>
+    <string name="tv_str_wednesday">среда</string>
+    <string name="tv_str_thursday">Четверг</string>
+    <string name="tv_str_friday">пятница</string>
+    <string name="tv_str_saturday">суббота</string>
 </resources>

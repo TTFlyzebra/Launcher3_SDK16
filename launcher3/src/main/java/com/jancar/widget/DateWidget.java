@@ -33,7 +33,7 @@ public class DateWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        FlyLog.e("onEnabled");
+        FlyLog.d("onEnabled");
         try {
             context.startService(new Intent(context, DateWidgetService.class));
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class DateWidget extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        FlyLog.e("onDisabled");
+        FlyLog.d("onDisabled");
         try {
             context.stopService(new Intent(context, DateWidgetService.class));
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class DateWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        FlyLog.e("onReceive");
+        FlyLog.d("onReceive");
         super.onReceive(context, intent);
     }
 
