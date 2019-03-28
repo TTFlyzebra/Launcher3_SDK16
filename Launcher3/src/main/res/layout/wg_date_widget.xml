@@ -4,34 +4,45 @@
     android:gravity="center">
 
     <TextView
+        android:id="@+id/tv_ampm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingStart="72px"
+        android:gravity="start"
+        android:maxLines="1"
+        android:textColor="#FFF"
+        android:textSize="16px" />
+
+    <TextView
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="96px"
-        android:textColor="#FFF"
-        android:maxLines="1"
         android:layout_alignParentTop="true"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="#FFF"
+        android:textSize="96px" />
 
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_time"
-        android:textSize="32px"
+        android:gravity="center"
         android:maxLines="1"
         android:textColor="#FFF"
-        android:gravity="center"/>
+        android:textSize="32px" />
 
     <TextView
         android:id="@+id/tv_week"
-        android:layout_marginTop="5px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_date"
+        android:layout_marginTop="5px"
+        android:gravity="center"
         android:maxLines="1"
-        android:textSize="32px"
         android:textColor="#FFF"
-        android:gravity="center"/>
+        android:textSize="32px" />
 
 </RelativeLayout>

@@ -2,12 +2,14 @@ package com.jancar.widget.sevice;
 
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
+import android.provider.Settings;
 import android.widget.RemoteViews;
 
 import com.android.launcher3.R;
@@ -18,35 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import static android.provider.Settings.Global.AUTO_TIME;
 
 public class DateWidgetService extends Service {
-    private Timer mTimer = new Timer();
-    private Handler mHandler = new Handler(Looper.getMainLooper());
-    private Runnable upTask = new Runnable() {
-        @Override
-        public void run() {
-            String tmpTime = getCurrentDate(TIME_FORMAT);
-            String tmpDate = getCurrentDate(DATE_FORMAT);
-            String tmpWeek = getCurrentWeek();
-            if (!(tmpTime.equals(time) && tmpDate.equals(date) && tmpWeek.equals(week))) {
-                RemoteViews views = new RemoteViews(getPackageName(), R.layout.wg_date_widget);
-                FlyLog.d("Timer schedule up time......");
-                views.setTextViewText(R.id.tv_time, tmpTime);
-                time = tmpTime;
-                FlyLog.d("Timer schedule up date......");
-                views.setTextViewText(R.id.tv_date, tmpDate);
-                date = tmpDate;
-                FlyLog.d("Timer schedule up week......");
-                views.setTextViewText(R.id.tv_week, tmpWeek);
-                week = tmpWeek;
-                ComponentName componentName = new ComponentName(DateWidgetService.this, DateWidget.class);
-                AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(componentName, views);
-            }
-        }
-    };
-
+    private boolean bTime24 = true;
+    private IntentFilter intentFilter;
+    private TimeChangeReceiver timeChangeReceiver;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -57,33 +37,54 @@ public class DateWidgetService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        try {
+            intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_TIME_TICK);//每分钟变化
+            intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);//设置了系统时区
+            intentFilter.addAction(Intent.ACTION_TIME_CHANGED);//设置了系统时间
+            intentFilter.addAction(AUTO_TIME);
+            timeChangeReceiver = new TimeChangeReceiver();
+            registerReceiver(timeChangeReceiver, intentFilter);
+            upView();
+        } catch (Exception e) {
+            FlyLog.d(e.toString());
+        }
 
-        //定义计时器
-        //启动周期性调度
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                FlyLog.d("Timer schedule run......");
-                //发送空消息，通知界面更新
-                mHandler.post(upTask);
-            }
-        }, 0, 1000);
+    }
+
+
+    private void upView() {
+        FlyLog.d("upView bTime24=" + bTime24);
+        bTime24 = Settings.System.getString(getContentResolver(), Settings.System.TIME_12_24).equals("24");
+        String tmpAmpm = getCurrentDate("a");
+        String tmpTime = getCurrentDate(bTime24 ? "HH:mm" : "hh:mm");
+        String tmpDate = getCurrentDate("yyyy-MM-dd");
+        String tmpWeek = getCurrentWeek();
+        RemoteViews views = new RemoteViews(getPackageName(), R.layout.wg_date_widget);
+        if(bTime24){
+            views.setTextViewText(R.id.tv_ampm, "");
+        }else{
+            views.setTextViewText(R.id.tv_ampm, tmpAmpm);
+        }
+        views.setTextViewText(R.id.tv_time, tmpTime);
+        views.setTextViewText(R.id.tv_date, tmpDate);
+        views.setTextViewText(R.id.tv_week, tmpWeek);
+        ComponentName componentName = new ComponentName(DateWidgetService.this, DateWidget.class);
+        AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(componentName, views);
     }
 
 
     @Override
     public void onDestroy() {
-        mTimer.cancel();
-        mHandler.removeCallbacksAndMessages(null);
+        try {
+            unregisterReceiver(timeChangeReceiver);
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
         super.onDestroy();
     }
 
     private String[] weeks = new String[7];
-    private String time = "";
-    private String date = "";
-    private String week = "";
-    private final String TIME_FORMAT = "HH:mm";
-    private final String DATE_FORMAT = "yyyy-MM-dd";
 
     private static String getCurrentDate(String dateFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.getDefault());
@@ -103,5 +104,18 @@ public class DateWidgetService extends Service {
         final Calendar mCalendar = Calendar.getInstance();
         mCalendar.setTime(date);
         return weeks[mCalendar.get(Calendar.DAY_OF_WEEK) - 1];
+    }
+
+    class TimeChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (intent.getAction()) {
+                case Intent.ACTION_TIME_TICK:
+                case Intent.ACTION_TIME_CHANGED:
+                case Intent.ACTION_TIMEZONE_CHANGED:
+                    upView();
+                    break;
+            }
+        }
     }
 }
