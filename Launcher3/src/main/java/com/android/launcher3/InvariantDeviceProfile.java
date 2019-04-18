@@ -197,6 +197,8 @@ public class InvariantDeviceProfile {
 
         predefinedDeviceProfiles.add(new InvariantDeviceProfile("JanCar_1024X600",
                 600, 1024,     2, 5, 2, 2, 4, 102, 20f,  5, 102, R.xml.jancar_default_workspace));
+        predefinedDeviceProfiles.add(new InvariantDeviceProfile("JanCar_1024X600",
+                480, 800,     2, 5, 2, 2, 4, 80, 20f,  5, 80, R.xml.jancar_default_workspace));
 //
 //        predefinedDeviceProfiles.add(new InvariantDeviceProfile("Nexus 10",
 //                727, 1207,    5, 6, 4, 5, 4, 76, 14.4f,  7, 64, R.xml.default_workspace_5x6));
