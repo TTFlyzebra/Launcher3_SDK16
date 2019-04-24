@@ -95,7 +95,8 @@
                         android:id="@+id/wg_music_play"
                         android:layout_width="42px"
                         android:layout_height="38px"
-                        android:src="@drawable/media_play" />
+                        android:src="@drawable/media_play"
+                        android:visibility="invisible"/>
                 </LinearLayout>
 
                 <LinearLayout
