@@ -8,11 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingStart="72px"
+        android:paddingStart="56px"
         android:gravity="start"
         android:maxLines="1"
         android:textColor="#FFF"
-        android:textSize="20px" />
+        android:textSize="16px" />
 
     <TextView
         android:id="@+id/tv_time"
@@ -22,7 +22,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:textColor="#FFF"
-        android:textSize="96px" />
+        android:textSize="75px" />
 
     <TextView
         android:id="@+id/tv_date"
@@ -32,17 +32,17 @@
         android:gravity="center"
         android:maxLines="1"
         android:textColor="#FFF"
-        android:textSize="32px" />
+        android:textSize="25px" />
 
     <TextView
         android:id="@+id/tv_week"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_date"
-        android:layout_marginTop="5px"
+        android:layout_marginTop="3px"
         android:gravity="center"
         android:maxLines="1"
         android:textColor="#FFF"
-        android:textSize="32px" />
+        android:textSize="25px" />
 
 </RelativeLayout>

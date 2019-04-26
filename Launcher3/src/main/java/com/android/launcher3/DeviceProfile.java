@@ -315,7 +315,7 @@ public class DeviceProfile {
                  */
                 padding.set(desiredWorkspaceLeftRightMarginPx - defaultWidgetPadding.left,
 //                        searchBarBounds.bottom,
-                        0,
+                        20,
                         desiredWorkspaceLeftRightMarginPx - defaultWidgetPadding.right,
                         hotseatBarHeightPx + pageIndicatorHeightPx);
             }
@@ -404,11 +404,11 @@ public class DeviceProfile {
 
         } else {
             // Horizontal search bar space
-            lp.gravity = Gravity.TOP;
+            lp.gravity = Gravity.CENTER;
             lp.height = searchBarSpaceHeightPx;
 
             LinearLayout targets = (LinearLayout) searchBar.findViewById(R.id.drag_target_bar);
-            targets.getLayoutParams().width = searchBarSpaceWidthPx;
+//            targets.getLayoutParams().width = searchBarSpaceWidthPx;
         }
         searchBar.setLayoutParams(lp);
 

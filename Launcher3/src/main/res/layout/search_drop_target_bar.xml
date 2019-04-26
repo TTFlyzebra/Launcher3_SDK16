@@ -51,7 +51,7 @@
                 android:text="@string/info_target_label" />
         </FrameLayout>
 
-        <FrameLayout
+        <RelativeLayout
             style="@style/DropTargetButtonContainer"
             android:layout_weight="1" >
 
@@ -60,8 +60,9 @@
             <com.android.launcher3.UninstallDropTarget
                 android:id="@+id/uninstall_target_text"
                 style="@style/DropTargetButton"
+                android:layout_alignParentEnd="true"
                 android:text="@string/delete_target_uninstall_label" />
-        </FrameLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </com.android.launcher3.SearchDropTargetBar>
