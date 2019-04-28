@@ -69,44 +69,50 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="ltr"
                 android:orientation="horizontal"
-                android:paddingTop="15px"
                 android:weightSum="3">
 
                 <LinearLayout
+                    android:id="@+id/wg_music_prev"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="left">
+                    android:gravity="left"
+                    android:paddingTop="15px"
+                    android:paddingBottom="15px">
 
                     <ImageView
-                        android:id="@+id/wg_music_prev"
                         android:layout_width="32px"
                         android:layout_height="29px"
                         android:src="@drawable/media_prev" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/wg_music_play"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingTop="15px"
+                    android:paddingBottom="15px">
 
                     <ImageView
-                        android:id="@+id/wg_music_play"
+                        android:id="@+id/wg_music_play_img"
                         android:layout_width="32px"
                         android:layout_height="29px"
                         android:src="@drawable/media_play"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/wg_music_next"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right">
+                    android:gravity="right"
+                    android:paddingTop="15px"
+                    android:paddingBottom="15px">
 
                     <ImageView
-                        android:id="@+id/wg_music_next"
                         android:layout_width="32px"
                         android:layout_height="29px"
                         android:src="@drawable/media_next" />
@@ -124,6 +130,7 @@
         android:visibility="gone">
 
         <ImageView
+            android:id="@+id/wg_radio_img"
             android:layout_width="96px"
             android:layout_height="match_parent"
             android:scaleType="center"
@@ -176,30 +183,33 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="ltr"
                 android:orientation="horizontal"
-                android:paddingTop="15px"
                 android:weightSum="2">
 
                 <LinearLayout
+                    android:id="@+id/wg_fm_prev"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="start">
+                    android:gravity="start"
+                    android:paddingTop="15px"
+                    android:paddingBottom="15px">
 
                     <ImageView
-                        android:id="@+id/wg_fm_prev"
                         android:layout_width="32px"
                         android:layout_height="29px"
                         android:src="@drawable/media_prev" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/wg_fm_next"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:paddingTop="15px"
+                    android:paddingBottom="15px">
 
                     <ImageView
-                        android:id="@+id/wg_fm_next"
                         android:layout_width="32px"
                         android:layout_height="29px"
                         android:src="@drawable/media_next" />

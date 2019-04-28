@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.android.launcher3.R;
+import com.jancar.JancarManager;
 import com.jancar.media.JacMediaController;
 import com.jancar.source.Page;
 import com.jancar.widget.MediaWidget;
@@ -26,7 +27,8 @@ import java.util.Locale;
 
 public class MediaWidgetService extends Service {
     private JacMediaController controller;
-    private String mSession = Page.PAGE_MUSIC;
+    private String mSession = Page.PAGE_FM;
+    private String mLastSession = Page.PAGE_FM;
     private String mTitle = "";
     private long mCurrent;
     private long mDuration;
@@ -40,6 +42,7 @@ public class MediaWidgetService extends Service {
     private static final String ACTION_NEXT = "intent.action.widget.ACTION_NEXT";
     private static final String ACTION_PREV = "intent.action.widget.ACTION_PREV";
     private static final String ACTION_PLAYPAUSE = "intent.action.widget.ACTION_PLAYPAUSE";
+    private static final String ACTION_OPENAPP = "intent.action.widget.ACTION_OPENAPP";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -56,13 +59,17 @@ public class MediaWidgetService extends Service {
         intentFilter.addAction(ACTION_NEXT);
         intentFilter.addAction(ACTION_PREV);
         intentFilter.addAction(ACTION_PLAYPAUSE);
+        intentFilter.addAction(ACTION_OPENAPP);
         registerReceiver(mReceiver, intentFilter);
         controller = new JacMediaController(getApplicationContext()) {
             @Override
             public void onSession(String page) {
                 FlyLog.d("onSession page=%s", page);
                 mSession = page;
-                upWidgetView();
+                if (mSession.equals(Page.PAGE_MUSIC) || mSession.equals(Page.PAGE_MUSIC) || mSession.equals(Page.PAGE_MUSIC)) {
+                    mLastSession = page;
+                    upWidgetView();
+                }
             }
 
             @Override
@@ -78,7 +85,7 @@ public class MediaWidgetService extends Service {
             @Override
             public void onPlayState(int state) {
                 FlyLog.d("onPlayState=%s", state);
-                if(playstate!=state){
+                if (playstate != state) {
                     playstate = state;
                     upWidgetView();
                 }
@@ -175,6 +182,7 @@ public class MediaWidgetService extends Service {
         //更新是MUSIC -FM
         switch (mSession) {
             case Page.PAGE_FM:
+            default:
                 remoteViews.setViewVisibility(R.id.wg_music, View.GONE);
                 remoteViews.setViewVisibility(R.id.wg_radio, View.VISIBLE);
                 remoteViews.setTextViewText(R.id.wg_fm_tv01, fmText);
@@ -184,6 +192,10 @@ public class MediaWidgetService extends Service {
                         PendingIntent.getBroadcast(this, 0, new Intent(ACTION_NEXT), 0));
                 remoteViews.setOnClickPendingIntent(R.id.wg_fm_prev,
                         PendingIntent.getBroadcast(this, 0, new Intent(ACTION_PREV), 0));
+                remoteViews.setOnClickPendingIntent(R.id.wg_radio_img,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPENAPP), 0));
+                remoteViews.setOnClickPendingIntent(R.id.wg_fm_tv02,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPENAPP), 0));
                 FlyLog.d("upWidgetView fm");
                 break;
             case Page.PAGE_MUSIC:
@@ -198,12 +210,12 @@ public class MediaWidgetService extends Service {
                 remoteViews.setProgressBar(R.id.media_music_progressbar, (int) (mDuration / 1000), (int) (mCurrent / 1000), false);
                 remoteViews.setTextViewText(R.id.media_music_starttime, str1);
                 remoteViews.setTextViewText(R.id.media_music_endtime, str2);
-                remoteViews.setImageViewResource(R.id.wg_music_play, playstate == 1 ? R.drawable.media_pause : R.drawable.media_play);
+                remoteViews.setImageViewResource(R.id.wg_music_play_img, playstate == 1 ? R.drawable.media_pause : R.drawable.media_play);
 
                 //更新图片
                 if (mBitmap == null) {
                     remoteViews.setImageViewResource(R.id.media_id3img,
-                            Page.PAGE_MUSIC.endsWith(mSession)?R.drawable.mediainfo_music_default:R.drawable.mediainfo_bt_default);
+                            Page.PAGE_MUSIC.endsWith(mSession) ? R.drawable.mediainfo_music_default : R.drawable.mediainfo_bt_default);
                 } else {
                     remoteViews.setImageViewBitmap(R.id.media_id3img, mBitmap);
                 }
@@ -215,6 +227,12 @@ public class MediaWidgetService extends Service {
                         PendingIntent.getBroadcast(this, 0, new Intent(ACTION_PLAYPAUSE), 0));
                 remoteViews.setOnClickPendingIntent(R.id.wg_music_prev,
                         PendingIntent.getBroadcast(this, 0, new Intent(ACTION_PREV), 0));
+                remoteViews.setOnClickPendingIntent(R.id.media_id3img,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPENAPP), 0));
+                remoteViews.setOnClickPendingIntent(R.id.media_music_title,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPENAPP), 0));
+                remoteViews.setOnClickPendingIntent(R.id.media_music_progressbar,
+                        PendingIntent.getBroadcast(this, 0, new Intent(ACTION_OPENAPP), 0));
                 FlyLog.d("upWidgetView music");
                 break;
         }
@@ -245,16 +263,41 @@ public class MediaWidgetService extends Service {
             if (action != null) {
                 switch (action) {
                     case ACTION_NEXT:
-                        playNext();
+                        if (!isJancarSession()) {
+                            startAppByLastSession();
+                        } else {
+                            playNext();
+                        }
                         break;
                     case ACTION_PREV:
-                        playPrev();
+                        if (!isJancarSession()) {
+                            startAppByLastSession();
+                        } else {
+                            playPrev();
+                        }
                         break;
                     case ACTION_PLAYPAUSE:
-                        playPasue();
+                        if (!isJancarSession()) {
+                            startAppByLastSession();
+                        } else {
+                            playPasue();
+                        }
+                        break;
+                    case ACTION_OPENAPP:
+                        startAppByLastSession();
                         break;
                 }
             }
         }
     };
+
+    private boolean isJancarSession() {
+        return Page.PAGE_FM.equals(mSession) || Page.PAGE_MUSIC.equals(mSession) || Page.PAGE_A2DP.equals(mSession);
+    }
+
+    @SuppressLint("WrongConstant")
+    private void startAppByLastSession() {
+        FlyLog.d("start app mSession=" + mLastSession);
+        ((JancarManager) getSystemService(JancarManager.JAC_SERVICE)).requestPage(mLastSession);
+    }
 }

@@ -1,5 +1,7 @@
 package com.jancar.widget.sevice;
 
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -13,6 +15,8 @@ import android.provider.Settings;
 import android.widget.RemoteViews;
 
 import com.android.launcher3.R;
+import com.jancar.JancarManager;
+import com.jancar.source.Page;
 import com.jancar.widget.DateWidget;
 import com.jancar.widget.utils.FlyLog;
 
@@ -27,6 +31,7 @@ public class DateWidgetService extends Service {
     private boolean bTime24 = true;
     private IntentFilter intentFilter;
     private TimeChangeReceiver timeChangeReceiver;
+    private static final String ACTION_SETTIME = "intent.action.widget.SETTIME";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -43,6 +48,7 @@ public class DateWidgetService extends Service {
             intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);//设置了系统时区
             intentFilter.addAction(Intent.ACTION_TIME_CHANGED);//设置了系统时间
             intentFilter.addAction(AUTO_TIME);
+            intentFilter.addAction(ACTION_SETTIME);
             timeChangeReceiver = new TimeChangeReceiver();
             registerReceiver(timeChangeReceiver, intentFilter);
             upView();
@@ -69,6 +75,8 @@ public class DateWidgetService extends Service {
         views.setTextViewText(R.id.tv_time, tmpTime);
         views.setTextViewText(R.id.tv_date, tmpDate);
         views.setTextViewText(R.id.tv_week, tmpWeek);
+        views.setOnClickPendingIntent(R.id.rltime,
+                PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SETTIME), 0));
         ComponentName componentName = new ComponentName(DateWidgetService.this, DateWidget.class);
         AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(componentName, views);
     }
@@ -107,6 +115,7 @@ public class DateWidgetService extends Service {
     }
 
     class TimeChangeReceiver extends BroadcastReceiver {
+        @SuppressLint("WrongConstant")
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
@@ -114,6 +123,11 @@ public class DateWidgetService extends Service {
                 case Intent.ACTION_TIME_CHANGED:
                 case Intent.ACTION_TIMEZONE_CHANGED:
                     upView();
+                    break;
+                case ACTION_SETTIME:
+                    Intent intent1 = new Intent();
+                    intent1.putExtra("position", 4);
+                    ((JancarManager)getSystemService(JancarManager.JAC_SERVICE)).requestPage(Page.PAGE_SETTING,intent1);
                     break;
             }
         }
