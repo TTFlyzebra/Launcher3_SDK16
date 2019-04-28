@@ -180,7 +180,7 @@ public class MediaWidgetService extends Service {
 //        FlyLog.d("upWidgetView");
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.wg_media_widget);
         //更新是MUSIC -FM
-        switch (mSession) {
+        switch (mLastSession) {
             case Page.PAGE_FM:
             default:
                 remoteViews.setViewVisibility(R.id.wg_music, View.GONE);
