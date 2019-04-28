@@ -66,7 +66,7 @@ public class MediaWidgetService extends Service {
             public void onSession(String page) {
                 FlyLog.d("onSession page=%s", page);
                 mSession = page;
-                if (mSession.equals(Page.PAGE_MUSIC) || mSession.equals(Page.PAGE_MUSIC) || mSession.equals(Page.PAGE_MUSIC)) {
+                if (mSession.equals(Page.PAGE_MUSIC) || mSession.equals(Page.PAGE_FM) || mSession.equals(Page.PAGE_A2DP)) {
                     mLastSession = page;
                     upWidgetView();
                 }
@@ -215,7 +215,7 @@ public class MediaWidgetService extends Service {
                 //更新图片
                 if (mBitmap == null) {
                     remoteViews.setImageViewResource(R.id.media_id3img,
-                            Page.PAGE_MUSIC.endsWith(mSession) ? R.drawable.mediainfo_music_default : R.drawable.mediainfo_bt_default);
+                            Page.PAGE_A2DP.endsWith(mLastSession) ? R.drawable.mediainfo_bt_default : R.drawable.mediainfo_music_default);
                 } else {
                     remoteViews.setImageViewBitmap(R.id.media_id3img, mBitmap);
                 }
